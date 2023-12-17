@@ -11,6 +11,7 @@ import { expect } from '@jest/globals';
 import { SessionService } from 'src/app/services/session.service';
 
 import { LoginComponent } from './login.component';
+import { By } from '@angular/platform-browser';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -37,11 +38,23 @@ describe('LoginComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    expect(component).toBeTruthy()
+  })
 
   it('should render the title', () => {
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('mat-card-title')?.textContent).toContain('Login');
-  });
-});
+    expect(compiled.querySelector('mat-card-title')?.textContent).toContain('Login')
+  })
+
+  it('trigger submit error', () => {
+    const compiled = fixture.nativeElement as HTMLElement
+    // const form = compiled.querySelector('form')
+    const form2 = fixture.debugElement.query(By.css('login-form'))
+    const submitFn = jest.spyOn(component, 'submit')
+    form2.triggerEventHandler('submit', null)
+    expect(submitFn).toHaveBeenCalled()
+
+  })
+
+
+})
