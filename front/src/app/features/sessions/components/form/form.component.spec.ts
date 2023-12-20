@@ -59,12 +59,14 @@ describe('FormComponent', () => {
   });
 
   it('form : required input missing => submit button disabled', () => {
+    const compiled = fixture.nativeElement as HTMLElement
     expect(component).toBeTruthy()
     const nameInput = component?.sessionForm?.get("name")
     expect(nameInput).toBeTruthy()
     expect(nameInput?.value).toBe("")
     // component.submit()
-    fixture.detectChanges()
     expect(component?.sessionForm?.invalid).toBeTruthy()
+    const submitButton = fixture.debugElement.query(By.css('button[type=submit]')).nativeElement
+    expect(submitButton.disabled).toBe(true)
   })
 })
