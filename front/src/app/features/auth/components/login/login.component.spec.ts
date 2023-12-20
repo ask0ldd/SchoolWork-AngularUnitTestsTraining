@@ -18,6 +18,7 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { SessionInformation } from 'src/app/interfaces/sessionInformation.interface';
 
+// Init mocks
 const sessionInformation = {
   token: 'string',
   type: 'string',
@@ -39,6 +40,8 @@ const sessionServiceMock = {
 const routerMock = {
   navigate : jest.fn((commands : string[]) => null)
 }
+
+// end init Mocks
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -77,20 +80,25 @@ describe('LoginComponent', () => {
     expect(compiled.querySelector('mat-card-title')?.textContent).toContain('Login')
   })
 
-  it('Submit error', () => {
+  it('Submit : Error', () => {
     const compiled = fixture.nativeElement as HTMLElement
 
-    authServiceMock.login.mockReturnValueOnce(throwError('error'));
+    authServiceMock.login.mockReturnValueOnce(throwError('error'))
+
+    let errorParagraph = fixture.debugElement.query(By.css('.error'))
+    expect(errorParagraph).toBeFalsy()
 
     const form2 = fixture.debugElement.query(By.css('.login-form'))
     const submitFn = jest.spyOn(component, 'submit')
     form2.triggerEventHandler('submit', null)
     expect(submitFn).toHaveBeenCalled()
-    expect(authServiceMock.login).toHaveBeenCalled();
-    expect(component.onError).toBe(true);
+    expect(authServiceMock.login).toHaveBeenCalled()
+    expect(component.onError).toBe(true)
+    fixture.detectChanges() // Trigger a DOM rerender
+    expect(fixture.debugElement.query(By.css('.error'))).toBeTruthy()
   })
 
-  it('Submit', () => {
+  it('Submit : Success', () => {
     const compiled = fixture.nativeElement as HTMLElement
 
     const form2 = fixture.debugElement.query(By.css('.login-form'))
