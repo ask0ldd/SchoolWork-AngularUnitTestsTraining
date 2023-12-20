@@ -16,10 +16,22 @@ import { By } from '@angular/platform-browser';
 import { of, throwError } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 
+const sessionInformation = {
+  token: 'string',
+  type: 'string',
+  id: 1,
+  username: 'string',
+  firstName: 'string',
+  lastName: 'string',
+  admin: true,
+}
+
 const authServiceMock = {
-  login: jest.fn(() => of({
-    
-  })),
+  login: jest.fn(() => of(sessionInformation)),
+}
+
+const sessionServiceMock = {
+  logIn : jest.fn((response) => null)
 }
 
 describe('LoginComponent', () => {
@@ -29,7 +41,8 @@ describe('LoginComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [LoginComponent],
-      providers: [SessionService,
+      providers: [
+        { provide: SessionService, useValue: sessionServiceMock },
         { provide: AuthService, useValue: authServiceMock }, // added to mock authservice
       ],
       imports: [
@@ -57,10 +70,10 @@ describe('LoginComponent', () => {
     expect(compiled.querySelector('mat-card-title')?.textContent).toContain('Login')
   })
 
-  it('trigger submit error', () => {
+  it('Submit error', () => {
     const compiled = fixture.nativeElement as HTMLElement
 
-    authServiceMock.login.mockReturnValue(throwError('error'));
+    authServiceMock.login.mockReturnValueOnce(throwError('error'));
 
     const form2 = fixture.debugElement.query(By.css('.login-form'))
     const submitFn = jest.spyOn(component, 'submit')
@@ -68,6 +81,17 @@ describe('LoginComponent', () => {
     expect(submitFn).toHaveBeenCalled()
     expect(authServiceMock.login).toHaveBeenCalled();
     expect(component.onError).toBe(true);
+  })
+
+  it('Submit', () => {
+    const compiled = fixture.nativeElement as HTMLElement
+
+    const form2 = fixture.debugElement.query(By.css('.login-form'))
+    const submitFn = jest.spyOn(component, 'submit')
+    form2.triggerEventHandler('submit', null)
+    expect(submitFn).toHaveBeenCalled()
+    expect(authServiceMock.login).toHaveBeenCalled();
+    expect(sessionServiceMock.logIn).toHaveBeenCalledWith(sessionInformation);
   })
 
 
