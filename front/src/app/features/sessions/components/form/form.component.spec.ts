@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { expect } from '@jest/globals';
@@ -18,6 +18,7 @@ import { By } from '@angular/platform-browser';
 import { Session } from '../../interfaces/session.interface';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
+import { snakeCase } from 'cypress/types/lodash';
 
 const session : Session = {
   id : 1,
@@ -39,6 +40,10 @@ const shortSession = {
 
 const sessionApiServiceMock = {
   create : jest.fn((session : Session) => of(session))
+}
+
+const snackBarMock = {
+  open : jest.fn()
 }
 
 /*const routerMock = {
@@ -74,6 +79,7 @@ describe('FormComponent', () => {
         { provide: SessionService, useValue: mockSessionService },
         { provide: SessionApiService, useValue: sessionApiServiceMock },
         // { provide: Router, useValue: routerMock },
+        { provide: MatSnackBar, useValue : snackBarMock },
       ],
       declarations: [FormComponent]
     })
@@ -141,8 +147,8 @@ describe('FormComponent', () => {
   it('form : submit form', () => {
     component.onUpdate = false
 
-    const router = TestBed.inject(Router);
-    const navigateSpy = jest.spyOn(router, 'navigate');
+    const router = TestBed.inject(Router) // retrieve an instance of a service from the TestBed's injector
+    const matSnackBar = TestBed.inject(MatSnackBarModule)
 
     const compiled = fixture.nativeElement as HTMLElement
     expect(component).toBeTruthy()
@@ -173,12 +179,14 @@ describe('FormComponent', () => {
 
     const submitFn = jest.spyOn(component, 'submit')
 
+    router.navigate = jest.fn()
+
     const form = fixture.debugElement.query(By.css('.mt2'))
     form.triggerEventHandler('submit', null)
 
     expect(sessionApiServiceMock.create).toHaveBeenCalledWith({...shortSession, teacher_id : session.teacher_id.toString(), date : "10/10/2023"})
-    expect(navigateSpy).toHaveBeenCalledWith(['sessions'])
-
+    expect(router.navigate).toHaveBeenCalledWith(['sessions'])
+    expect(snackBarMock.open).toHaveBeenCalledWith("Session created !", "Close", {"duration": 3000})
   })
 
 
