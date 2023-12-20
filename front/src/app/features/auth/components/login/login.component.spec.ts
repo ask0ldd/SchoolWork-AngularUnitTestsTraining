@@ -15,6 +15,8 @@ import { LoginComponent } from './login.component';
 import { By } from '@angular/platform-browser';
 import { of, throwError } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
+import { SessionInformation } from 'src/app/interfaces/sessionInformation.interface';
 
 const sessionInformation = {
   token: 'string',
@@ -31,7 +33,11 @@ const authServiceMock = {
 }
 
 const sessionServiceMock = {
-  logIn : jest.fn((response) => null)
+  logIn : jest.fn((response : SessionInformation) => null)
+}
+
+const routerMock = {
+  navigate : jest.fn((commands : string[]) => null)
 }
 
 describe('LoginComponent', () => {
@@ -44,6 +50,7 @@ describe('LoginComponent', () => {
       providers: [
         { provide: SessionService, useValue: sessionServiceMock },
         { provide: AuthService, useValue: authServiceMock }, // added to mock authservice
+        { provide: Router, useValue: routerMock },
       ],
       imports: [
         RouterTestingModule,
@@ -90,8 +97,9 @@ describe('LoginComponent', () => {
     const submitFn = jest.spyOn(component, 'submit')
     form2.triggerEventHandler('submit', null)
     expect(submitFn).toHaveBeenCalled()
-    expect(authServiceMock.login).toHaveBeenCalled();
-    expect(sessionServiceMock.logIn).toHaveBeenCalledWith(sessionInformation);
+    expect(authServiceMock.login).toHaveBeenCalled()
+    expect(sessionServiceMock.logIn).toHaveBeenCalledWith(sessionInformation)
+    expect(routerMock.navigate).toHaveBeenCalledWith(['/sessions'])
   })
 
 
