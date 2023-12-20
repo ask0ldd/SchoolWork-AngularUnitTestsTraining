@@ -14,6 +14,7 @@ import { SessionService } from 'src/app/services/session.service';
 import { SessionApiService } from '../../services/session-api.service';
 
 import { FormComponent } from './form.component';
+import { By } from '@angular/platform-browser';
 
 describe('FormComponent', () => {
   let component: FormComponent;
@@ -56,4 +57,14 @@ describe('FormComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-});
+
+  it('form : required input missing => submit button disabled', () => {
+    expect(component).toBeTruthy()
+    const nameInput = component?.sessionForm?.get("name")
+    expect(nameInput).toBeTruthy()
+    expect(nameInput?.value).toBe("")
+    // component.submit()
+    fixture.detectChanges()
+    expect(component?.sessionForm?.invalid).toBeTruthy()
+  })
+})

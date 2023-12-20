@@ -40,7 +40,6 @@ const sessionServiceMock = {
 const routerMock = {
   navigate : jest.fn((commands : string[]) => null)
 }
-
 // end init Mocks
 
 describe('LoginComponent', () => {
