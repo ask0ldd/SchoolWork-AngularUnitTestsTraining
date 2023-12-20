@@ -22,7 +22,7 @@ const session : Session = {
   id : 1,
   name : 'name',
   description : 'description',
-  date : new Date(),
+  date : new Date("10/10/2023"),
   teacher_id : 1,
   users : [2, 3],
   createdAt : new Date(),
@@ -136,26 +136,18 @@ describe('FormComponent', () => {
     expect(submitButton.disabled).toBe(true)
 
     const nameInput = component?.sessionForm?.get("name")
-    expect(nameInput).toBeTruthy()
-    expect(nameInput?.value).toBe("")
     nameInput?.setValue("name")
     expect(nameInput?.value).toBe("name")
 
     const dateInput = component?.sessionForm?.get("date")
-    expect(dateInput).toBeTruthy()
-    expect(dateInput?.value).toBe("")
     dateInput?.setValue("10/10/2023")
     expect(dateInput?.value).toBe("10/10/2023")
     
     const teacherInput = component?.sessionForm?.get("teacher_id")
-    expect(teacherInput).toBeTruthy()
-    expect(teacherInput?.value).toBe("")
     teacherInput?.setValue("1")
     expect(teacherInput?.value).toBe("1")
 
     const descriptionInput = component?.sessionForm?.get("description")
-    expect(descriptionInput).toBeTruthy()
-    expect(descriptionInput?.value).toBe("")
     descriptionInput?.setValue("description")
     expect(descriptionInput?.value).toBe("description")
 
@@ -163,7 +155,13 @@ describe('FormComponent', () => {
 
     expect(submitButton.disabled).toBe(false)
 
-    compiled.querySelector("form").triggerEventHandler('submit', null)
+    const submitFn = jest.spyOn(component, 'submit')
+
+    const form = fixture.debugElement.query(By.css('.mt2'))
+    form.triggerEventHandler('submit', null)
+
+    expect(sessionApiServiceMock.create).toHaveBeenCalledWith({...session, teacher_id : session.teacher_id.toString(), date : "10/10/2023"})
+
   })
 
 

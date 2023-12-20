@@ -98,10 +98,12 @@ describe('LoginComponent', () => {
   })
 
   it('Submit : Success', () => {
+    // nativeElement: The underlying DOM element at the root of the component.
     const compiled = fixture.nativeElement as HTMLElement
 
     const form2 = fixture.debugElement.query(By.css('.login-form'))
     const submitFn = jest.spyOn(component, 'submit')
+    // If the event lacks a listener or there's some other problem, consider calling : nativeElement.dispatchEvent(eventObject).
     form2.triggerEventHandler('submit', null)
     expect(submitFn).toHaveBeenCalled()
     expect(authServiceMock.login).toHaveBeenCalled()
