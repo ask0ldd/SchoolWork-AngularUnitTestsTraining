@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
 import { SessionInformation } from 'src/app/interfaces/sessionInformation.interface';
 
 // Init mocks
-const sessionInformation = {
+const sessionInformation : SessionInformation = {
   token: 'string',
   type: 'string',
   id: 1,
