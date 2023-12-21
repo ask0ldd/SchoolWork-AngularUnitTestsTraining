@@ -52,4 +52,10 @@ describe('SessionsService', () => {
     service.update("1", session)
     expect(httpClient.put).toHaveBeenCalledWith("api/session/1", session)
   })
+
+  it('participate', () => {
+    httpClient.post = jest.fn()
+    service.participate("1", "2")
+    expect(httpClient.put).toHaveBeenCalledWith("api/session/1/participate/2", null)
+  })
 });
