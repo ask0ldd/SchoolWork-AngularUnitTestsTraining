@@ -37,8 +37,14 @@ describe('SessionsService', () => {
 
   it('all', () => {
     httpClient.get = jest.fn()
-    service.delete("api/session")
-    expect(httpClient.delete).toHaveBeenCalledWith("api/session")
+    service.all()
+    expect(httpClient.get).toHaveBeenCalledWith("api/session")
+  })
+
+  it('detail', () => {
+    httpClient.get = jest.fn()
+    service.detail("1")
+    expect(httpClient.get).toHaveBeenCalledWith("api/session/1")
   })
 
   it('delete', () => {
