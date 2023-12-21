@@ -35,6 +35,12 @@ describe('SessionsService', () => {
     expect(service).toBeTruthy();
   });
 
+  it('all', () => {
+    httpClient.get = jest.fn()
+    service.delete("api/session")
+    expect(httpClient.delete).toHaveBeenCalledWith("api/session")
+  })
+
   it('delete', () => {
     httpClient.delete = jest.fn()
     service.delete("1")
