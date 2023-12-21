@@ -46,4 +46,10 @@ describe('SessionsService', () => {
     service.create(session)
     expect(httpClient.post).toHaveBeenCalledWith("api/session", session)
   })
+
+  it('update', () => {
+    httpClient.put = jest.fn()
+    service.update("1", session)
+    expect(httpClient.put).toHaveBeenCalledWith("api/session/1", session)
+  })
 });
