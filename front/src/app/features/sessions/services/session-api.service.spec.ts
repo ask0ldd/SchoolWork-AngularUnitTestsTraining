@@ -36,9 +36,6 @@ describe('SessionsService', () => {
   });
 
   it('all', () => {
-    /*httpClient.get = jest.fn()
-    service.all()
-    expect(httpClient.get).toHaveBeenCalledWith("api/session")*/
     const httpClientSpy = jest.spyOn(httpClient, 'get').mockReturnValue(of([{...session}, {...session}]))
     service.all().subscribe(sessions => {
       expect(sessions).toEqual([{...session}, {...session}])
@@ -58,15 +55,22 @@ describe('SessionsService', () => {
   })
 
   it('delete', () => {
-    httpClient.delete = jest.fn()
-    service.delete("1")
-    expect(httpClient.delete).toHaveBeenCalledWith("api/session/1")
+    const httpClientSpy = jest.spyOn(httpClient, 'delete').mockReturnValue(of(null))
+    service.delete("1").subscribe(retVal => {
+      expect(retVal).toEqual(null)
+      expect(httpClientSpy).toHaveBeenCalledWith("1")
+    })
   })
 
   it('create', () => {
-    httpClient.post = jest.fn()
+    /*httpClient.post = jest.fn()
     service.create(session)
-    expect(httpClient.post).toHaveBeenCalledWith("api/session", session)
+    expect(httpClient.post).toHaveBeenCalledWith("api/session", session)*/
+    const httpClientSpy = jest.spyOn(httpClient, 'post').mockReturnValue(of(session))
+    service.create(session).subscribe(retVal => {
+      expect(retVal).toEqual(session)
+      expect(httpClientSpy).toHaveBeenCalledWith(session)
+    })
   })
 
   it('update', () => {
