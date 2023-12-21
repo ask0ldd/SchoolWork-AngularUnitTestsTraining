@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { expect } from '@jest/globals';
 
 import { SessionApiService } from './session-api.service';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Session } from '../interfaces/session.interface';
 
 const session : Session = {
@@ -36,15 +36,25 @@ describe('SessionsService', () => {
   });
 
   it('all', () => {
-    httpClient.get = jest.fn()
+    /*httpClient.get = jest.fn()
     service.all()
-    expect(httpClient.get).toHaveBeenCalledWith("api/session")
+    expect(httpClient.get).toHaveBeenCalledWith("api/session")*/
+    const httpClientSpy = jest.spyOn(httpClient, 'get').mockReturnValue(of([{...session}, {...session}]))
+    service.all().subscribe(sessions => {
+      expect(sessions).toEqual([{...session}, {...session}])
+      expect(httpClientSpy).toHaveBeenCalledWith("api/session")
+    })
   })
 
   it('detail', () => {
-    httpClient.get = jest.fn()
-    service.detail("1")
-    expect(httpClient.get).toHaveBeenCalledWith("api/session/1")
+    // httpClient.get = jest.fn((url : string) : Observable<Session> => of(session))
+    // service.detail("1")
+    // expect(httpClient.get).toHaveBeenCalledWith("api/session/1")
+    const httpClientSpy = jest.spyOn(httpClient, 'get').mockReturnValue(of(session))
+    service.detail("1").subscribe(session => {
+      expect(session).toEqual(session)
+      expect(httpClientSpy).toHaveBeenCalledWith("api/session")
+    })
   })
 
   it('delete', () => {
