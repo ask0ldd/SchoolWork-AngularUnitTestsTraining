@@ -9,6 +9,7 @@ import { SessionService } from 'src/app/services/session.service';
 
 import { MeComponent } from './me.component';
 import { of } from 'rxjs';
+import { UserService } from 'src/app/services/user.service';
 
 describe('MeComponent', () => {
   let component: MeComponent;
@@ -34,17 +35,6 @@ describe('MeComponent', () => {
     })
   }
 
-  /*
-  id: number;
-  email: string;
-  lastName: string;
-  firstName: string;
-  admin: boolean;
-  password: string;
-  createdAt: Date;
-  updatedAt?: Date;
-  */
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MeComponent],
@@ -56,10 +46,12 @@ describe('MeComponent', () => {
         MatIconModule,
         MatInputModule
       ],
-      providers: [{ provide: SessionService, useValue: mockSessionService }],
+      providers: [
+        { provide: SessionService, useValue: mockSessionService },
+        { provide: UserService, useValue: mockUserService },
+      ],
     })
       .compileComponents();
-
     fixture = TestBed.createComponent(MeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -69,5 +61,8 @@ describe('MeComponent', () => {
     expect(component).toBeTruthy()
   })
 
+  it('should create', () => {
+    expect(component).toBeTruthy()
+  })
 
 })
