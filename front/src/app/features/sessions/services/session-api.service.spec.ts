@@ -4,6 +4,18 @@ import { expect } from '@jest/globals';
 
 import { SessionApiService } from './session-api.service';
 import { of } from 'rxjs';
+import { Session } from '../interfaces/session.interface';
+
+const session : Session = {
+  id : 1,
+  name : 'name',
+  description : 'description',
+  date : new Date("10/10/2023"),
+  teacher_id : 1,
+  users : [2, 3],
+  createdAt : new Date(),
+  updatedAt : new Date(),
+}
 
 describe('SessionsService', () => {
   let service: SessionApiService;
@@ -27,5 +39,11 @@ describe('SessionsService', () => {
     httpClient.delete = jest.fn()
     service.delete("1")
     expect(httpClient.delete).toHaveBeenCalledWith("api/session/1")
+  })
+
+  it('create', () => {
+    httpClient.post = jest.fn()
+    service.create(session)
+    expect(httpClient.post).toHaveBeenCalledWith("api/session", session)
   })
 });
