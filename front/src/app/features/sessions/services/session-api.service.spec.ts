@@ -79,14 +79,18 @@ describe('SessionsService', () => {
   })
 
   it('participate', () => {
-    httpClient.post = jest.fn()
-    service.participate("1", "2")
-    expect(httpClient.post).toHaveBeenCalledWith("api/session/1/participate/2", null)
+    const httpClientSpy = jest.spyOn(httpClient, 'post').mockReturnValue(of())
+    service.participate("1", "2").subscribe(retVoid => {
+      expect(retVoid).toBe(void 0)
+      expect(httpClientSpy).toHaveBeenCalledWith("api/session/1/participate/2", null)
+    })
   })
 
   it('unparticipate', () => {
-    httpClient.delete = jest.fn()
-    service.unParticipate("1", "2")
-    expect(httpClient.delete).toHaveBeenCalledWith("api/session/1/participate/2")
+    const httpClientSpy = jest.spyOn(httpClient, 'delete').mockReturnValue(of())
+    service.unParticipate("1", "2").subscribe(retVoid => {
+      expect(retVoid).toBe(void 0)
+      expect(httpClientSpy).toHaveBeenCalledWith("api/session/1/participate/2")
+    })
   })
 });
