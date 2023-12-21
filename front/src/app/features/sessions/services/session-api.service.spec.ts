@@ -56,6 +56,12 @@ describe('SessionsService', () => {
   it('participate', () => {
     httpClient.post = jest.fn()
     service.participate("1", "2")
-    expect(httpClient.put).toHaveBeenCalledWith("api/session/1/participate/2", null)
+    expect(httpClient.post).toHaveBeenCalledWith("api/session/1/participate/2", null)
+  })
+
+  it('unparticipate', () => {
+    httpClient.delete = jest.fn()
+    service.unParticipate("1", "2")
+    expect(httpClient.delete).toHaveBeenCalledWith("api/session/1/participate/2")
   })
 });
