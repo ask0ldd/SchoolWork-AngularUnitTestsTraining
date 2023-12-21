@@ -8,6 +8,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SessionService } from 'src/app/services/session.service';
 
 import { MeComponent } from './me.component';
+import { of } from 'rxjs';
 
 describe('MeComponent', () => {
   let component: MeComponent;
@@ -19,6 +20,31 @@ describe('MeComponent', () => {
       id: 1
     }
   }
+
+  const mockUserService = {
+    getById : (id : string) => of({
+      id: 1,
+      email: 'email@email.com',
+      lastName: 'lastname',
+      firstName: 'firstname',
+      admin: true,
+      password: 'password',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
+  }
+
+  /*
+  id: number;
+  email: string;
+  lastName: string;
+  firstName: string;
+  admin: boolean;
+  password: string;
+  createdAt: Date;
+  updatedAt?: Date;
+  */
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MeComponent],
@@ -40,6 +66,8 @@ describe('MeComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+
+
+})

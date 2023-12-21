@@ -187,7 +187,7 @@ describe('FormComponent', () => {
   })
 
   it('form : submit form : update session', () => {
-    component.onUpdate = true
+    component.onUpdate = true // !!! should use router instead with update into url
 
     const router = TestBed.inject(Router) // retrieve an instance of a service from the TestBed's injector
     const matSnackBar = TestBed.inject(MatSnackBarModule)
