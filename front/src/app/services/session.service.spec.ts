@@ -44,4 +44,15 @@ describe('SessionService', () => {
       expect(value).toBeTruthy()
     })
   })
+
+  it('logout', () => {
+    service.logOut()
+    expect(service.isLogged).toBeFalsy()
+    expect(service.sessionInformation).toBeUndefined()
+    service.$isLogged().subscribe(value => {
+      expect(value).toBeFalsy()
+    })
+  })
+
+
 });
