@@ -52,4 +52,12 @@ describe('UserService', () => {
       expect(httpClientSpy).toHaveBeenCalledWith("api/user/1")
     })
   })
+
+  it('delete', () => {
+    const httpClientSpy = jest.spyOn(httpClient, 'get').mockReturnValue(of(void 0))
+    service.delete("1").subscribe(retVoid => {
+      expect(retVoid).toEqual(void 0)
+      expect(httpClientSpy).toHaveBeenCalledWith("api/user/1")
+    })
+  })
 });
