@@ -39,4 +39,12 @@ describe('TeacherService', () => {
       expect(httpClientSpy).toHaveBeenCalledWith("api/teacher")
     })
   })
+
+  it('detail', () => {
+    const httpClientSpy = jest.spyOn(httpClient, 'get').mockReturnValue(of({...teacher}))
+    service.detail("1").subscribe(retTeacher => {
+      expect(retTeacher).toEqual({...teacher})
+      expect(httpClientSpy).toHaveBeenCalledWith("api/teacher/1")
+    })
+  })
 });
