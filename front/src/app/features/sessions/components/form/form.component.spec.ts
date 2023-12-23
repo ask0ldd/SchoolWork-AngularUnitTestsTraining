@@ -184,6 +184,7 @@ describe('FormComponent', () => {
     expect(sessionApiServiceMock.create).toHaveBeenCalledWith({...shortSession, teacher_id : session.teacher_id.toString(), date : "10/10/2023"})
     expect(router.navigate).toHaveBeenCalledWith(['sessions'])
     expect(snackBarMock.open).toHaveBeenCalledWith("Session created !", "Close", {"duration": 3000})
+    // !!! test snackbar into dom
   })
 
   it('form : submit form : update session', () => {
