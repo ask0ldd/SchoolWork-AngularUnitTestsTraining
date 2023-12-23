@@ -32,7 +32,7 @@ describe('TeacherService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('all', () => {
+  it('An array of all teachers can be retrieved', () => {
     const httpClientSpy = jest.spyOn(httpClient, 'get').mockReturnValue(of([{...teacher}, {...teacher}]))
     service.all().subscribe(teachers => {
       expect(teachers).toEqual([{...teacher}, {...teacher}])
@@ -40,7 +40,7 @@ describe('TeacherService', () => {
     })
   })
 
-  it('detail', () => {
+  it('The details for a target teacher can be retrieved', () => {
     const httpClientSpy = jest.spyOn(httpClient, 'get').mockReturnValue(of({...teacher}))
     service.detail("1").subscribe(retTeacher => {
       expect(retTeacher).toEqual({...teacher})

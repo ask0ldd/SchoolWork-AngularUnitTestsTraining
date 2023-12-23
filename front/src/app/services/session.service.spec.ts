@@ -36,7 +36,7 @@ describe('SessionService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('login', () => {
+  it('The Login method store the session informations and a positive login status is emitted through $îsLogged', () => {
     service.logIn(sessionInformation)
     expect(service.isLogged).toBeTruthy()
     expect(service.sessionInformation).toEqual(sessionInformation)
@@ -45,7 +45,7 @@ describe('SessionService', () => {
     })
   })
 
-  it('logout', () => {
+  it('The Logout method dump the session informations and a negative login status is emitted through $îsLogged', () => {
     service.logOut()
     expect(service.isLogged).toBeFalsy()
     expect(service.sessionInformation).toBeUndefined()
@@ -53,6 +53,5 @@ describe('SessionService', () => {
       expect(value).toBeFalsy()
     })
   })
-
 
 });

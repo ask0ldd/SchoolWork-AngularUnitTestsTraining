@@ -45,7 +45,7 @@ describe('UserService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('getById', () => {
+  it('A User can be retrieved by Id', () => {
     const httpClientSpy = jest.spyOn(httpClient, 'get').mockReturnValue(of({...user}))
     service.getById("1").subscribe(retUser => {
       expect(retUser).toEqual({...user})
@@ -53,7 +53,7 @@ describe('UserService', () => {
     })
   })
 
-  it('delete', () => {
+  it('A User can be deleted', () => {
     const httpClientSpy = jest.spyOn(httpClient, 'get').mockReturnValue(of(void 0))
     service.delete("1").subscribe(retVoid => {
       expect(retVoid).toEqual(void 0)
