@@ -11,6 +11,7 @@ import { SessionInformation } from 'src/app/interfaces/sessionInformation.interf
 import { SessionApiService } from '../../services/session-api.service';
 import { of } from 'rxjs';
 import { By } from '@angular/platform-browser';
+import { DatePipe } from '@angular/common';
 
 const session1 : Session = {
   id : 1,
@@ -57,6 +58,7 @@ const sessionInformation : SessionInformation = {
 describe('ListComponent', () => {
   let component: ListComponent;
   let fixture: ComponentFixture<ListComponent>;
+  let datePipe: DatePipe;
 
   const mockSessionService = {
     sessionInformation: {
@@ -80,6 +82,7 @@ describe('ListComponent', () => {
     fixture = TestBed.createComponent(ListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    datePipe = new DatePipe(`en-US`);
   });
 
   it('should create', () => {
@@ -96,7 +99,7 @@ describe('ListComponent', () => {
     expect(item2.queryAll(By.css('mat-card-title'))[0].nativeElement.textContent).toEqual(session2.name)
     expect((item1.queryAll(By.css('mat-card-content p'))[0].nativeElement.textContent as string).trim()).toEqual(session1.description)
     expect((item2.queryAll(By.css('mat-card-content p'))[0].nativeElement.textContent as string).trim()).toEqual(session2.description)
-    expect((item1.queryAll(By.css('mat-card-subtitle'))[0].nativeElement.textContent as string).trim()).toEqual('Session on ' + 'October 10, 2023')
-    expect((item2.queryAll(By.css('mat-card-subtitle'))[0].nativeElement.textContent as string).trim()).toEqual('Session on ' + 'October 10, 2023') // !!!
+    expect((item1.queryAll(By.css('mat-card-subtitle'))[0].nativeElement.textContent as string).trim()).toEqual('Session on ' + datePipe.transform(session1.date, 'longDate'))
+    expect((item2.queryAll(By.css('mat-card-subtitle'))[0].nativeElement.textContent as string).trim()).toEqual('Session on ' + datePipe.transform(session2.date, 'longDate')) // using pipe
   })
 });
