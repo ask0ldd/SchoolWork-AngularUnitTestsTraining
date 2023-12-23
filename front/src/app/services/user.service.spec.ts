@@ -17,16 +17,6 @@ const user : User = {
   updatedAt: new Date(),
 }
 
-/*
-  id: number;
-  email: string;
-  lastName: string;
-  firstName: string;
-  admin: boolean;
-  password: string;
-  createdAt: Date;
-  updatedAt?: Date;*/
-
 describe('UserService', () => {
   let service: UserService;
   let httpClient : HttpClient
