@@ -1,6 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatCardModule } from '@angular/material/card';
+import { MatCardModule, MatCardTitle } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { expect } from '@jest/globals';
 import { SessionService } from 'src/app/services/session.service';
@@ -90,5 +90,13 @@ describe('ListComponent', () => {
     expect(component).toBeTruthy()
     expect(mockSessionAPIService.all).toHaveBeenCalled()
     expect(fixture.debugElement.queryAll(By.css('.item')).length).toEqual(2)
+    const item1 = fixture.debugElement.queryAll(By.css('.item'))[0]
+    const item2 = fixture.debugElement.queryAll(By.css('.item'))[1]
+    expect(item1.queryAll(By.css('mat-card-title'))[0].nativeElement.textContent).toEqual(session1.name)
+    expect(item2.queryAll(By.css('mat-card-title'))[0].nativeElement.textContent).toEqual(session2.name)
+    expect((item1.queryAll(By.css('mat-card-content p'))[0].nativeElement.textContent as string).trim()).toEqual(session1.description)
+    expect((item2.queryAll(By.css('mat-card-content p'))[0].nativeElement.textContent as string).trim()).toEqual(session2.description)
+    expect((item1.queryAll(By.css('mat-card-subtitle'))[0].nativeElement.textContent as string).trim()).toEqual('Session on ' + 'October 10, 2023')
+    expect((item2.queryAll(By.css('mat-card-subtitle'))[0].nativeElement.textContent as string).trim()).toEqual('Session on ' + 'October 10, 2023') // !!!
   })
 });
