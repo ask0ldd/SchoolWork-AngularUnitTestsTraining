@@ -35,12 +35,20 @@ describe('AppComponent', () => {
 
   it('when Logged should display a menu with 3 items : Sessions, Account, Logout', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
     sessionService.$isLogged = jest.fn(() => of(true))
     fixture.detectChanges()
     expect(fixture.debugElement.queryAll(By.css('.link')).length).toEqual(3)
     const insideSpansTexts = fixture.debugElement.queryAll(By.css('.link')).map(element => (element.nativeElement as HTMLSpanElement).textContent)
     expect(insideSpansTexts).toStrictEqual(['Sessions', 'Account', 'Logout'])
-  });
+  })
+
+  it('when Logged should display a menu with 3 items : Sessions, Account, Logout', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    sessionService.$isLogged = jest.fn(() => of(false))
+    fixture.detectChanges()
+    expect(fixture.debugElement.queryAll(By.css('.link')).length).toEqual(2)
+    const insideSpansTexts = fixture.debugElement.queryAll(By.css('.link')).map(element => (element.nativeElement as HTMLSpanElement).textContent)
+    expect(insideSpansTexts).toStrictEqual(['Login', 'Register'])
+  })
 
 });
