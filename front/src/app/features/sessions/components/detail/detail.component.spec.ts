@@ -1,7 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterTestingModule, } from '@angular/router/testing';
 import { expect } from '@jest/globals'; 
 import { SessionService } from '../../../../services/session.service';
@@ -17,6 +17,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 const session : Session = {
@@ -62,11 +63,24 @@ describe('DetailComponent', () => {
     unParticipate : jest.fn(() => {
       if(session.users.includes(userId)) session.users.pop()
       return of(void 0)
-    })
+    }), 
+    delete : jest.fn(() => of(void 0))
   }
 
   const mockTeacherService = {
     detail : jest.fn(() => of(teacher))
+  }
+
+  const snackBarMock = {
+    open : jest.fn()
+  }
+
+  const activatedRouteMock = {
+    snapshot : {
+      paramMap : {
+        get : (id : any) => 1
+      }
+    }
   }
 
   beforeEach(async () => {
@@ -86,12 +100,16 @@ describe('DetailComponent', () => {
       declarations: [DetailComponent], 
       providers: [{ provide: SessionService, useValue: mockSessionService },
       {provide: SessionApiService, useValue : mockSessionAPIService},
-      {provide: TeacherService, useValue : mockTeacherService}],
+      {provide: TeacherService, useValue : mockTeacherService},
+      { provide: MatSnackBar, useValue : snackBarMock },
+      { provide: ActivatedRoute, useValue : activatedRouteMock },
+    ]
     })
       .compileComponents();
     service = TestBed.inject(SessionService);
     fixture = TestBed.createComponent(DetailComponent);
     component = fixture.componentInstance;
+    
     fixture.detectChanges();
   });
 
@@ -112,7 +130,7 @@ describe('DetailComponent', () => {
     expect(windowHistorySpy).toHaveBeenCalled()
   })
 
-  it('if not admin, button participate should be available and working', () => {
+  it('if not admin, button participate should be displayed and working', () => {
     // component.sessionId = "1"
     // component.userId = "1"
     // session.users = [2, 3]
@@ -126,7 +144,7 @@ describe('DetailComponent', () => {
     expect(session.users.includes(userId)).toBeTruthy()    
   })
 
-  it('if not admin and user participation to the session, button unparticipate should be available and working', () => {
+  it('if not admin and user participation to the session, button unparticipate should be displayed and working', () => {
     mockSessionAPIService.participate()
     fixture.detectChanges()
     const buttons = fixture.debugElement.queryAll(By.css('button'))
@@ -137,8 +155,19 @@ describe('DetailComponent', () => {
     expect(session.users.includes(userId)).toBeFalsy()    
   })
 
-
-  // should be able to participate / unparticipate only if non admin
+  it('if admin, delete button should be displayed and working', () => {
+    component.isAdmin = true
+    const router = TestBed.inject(Router)
+    router.navigate = jest.fn()
+    mockSessionService.sessionInformation.admin = true;
+    fixture.detectChanges()
+    const buttons = fixture.debugElement.queryAll(By.css('button'))
+    const deleteButton = buttons[1]
+    deleteButton.triggerEventHandler('click', null)
+    expect(mockSessionAPIService.delete).toHaveBeenCalledWith(session.id)
+    expect(router.navigate).toHaveBeenCalledWith(['sessions'])
+    expect(snackBarMock.open).toHaveBeenCalledWith('Session deleted !', 'Close', { duration: 3000 })
+  })
   
-});
+})
 
