@@ -112,12 +112,12 @@ describe('DetailComponent', () => {
     expect(windowHistorySpy).toHaveBeenCalled()
   })
 
-  it('if not admin, button participate should be available and working', () => { // !!!! to fix
-    component.sessionId = "1"
-    component.userId = "1"
-    session.users = [2, 3]
+  it('if not admin, button participate should be available and working', () => {
+    // component.sessionId = "1"
+    // component.userId = "1"
+    // session.users = [2, 3]
     // component.isAdmin = false
-    fixture.detectChanges();
+    // fixture.detectChanges();
     const buttons = fixture.debugElement.queryAll(By.css('button'))
     expect(buttons.length).toBe(2)
     const participateButton = buttons[1]
@@ -125,6 +125,18 @@ describe('DetailComponent', () => {
     expect(mockSessionAPIService.participate).toHaveBeenCalled()
     expect(session.users.includes(userId)).toBeTruthy()    
   })
+
+  it('if not admin and user participation to the session, button unparticipate should be available and working', () => {
+    mockSessionAPIService.participate()
+    fixture.detectChanges()
+    const buttons = fixture.debugElement.queryAll(By.css('button'))
+    expect(buttons.length).toBe(2)
+    const unparticipateButton = buttons[1]
+    unparticipateButton.triggerEventHandler('click', null)
+    expect(mockSessionAPIService.unParticipate).toHaveBeenCalled()
+    expect(session.users.includes(userId)).toBeFalsy()    
+  })
+
 
   // should be able to participate / unparticipate only if non admin
   
