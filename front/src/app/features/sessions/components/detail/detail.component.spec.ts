@@ -11,6 +11,7 @@ import { By } from '@angular/platform-browser';
 import { Session } from '../../interfaces/session.interface';
 import { of } from 'rxjs';
 import { SessionApiService } from '../../services/session-api.service';
+import { TeacherService } from 'src/app/services/teacher.service';
 
 
 const session : Session = {
@@ -62,7 +63,8 @@ describe('DetailComponent', () => {
       ],
       declarations: [DetailComponent], 
       providers: [{ provide: SessionService, useValue: mockSessionService },
-      {provide: SessionApiService, useValue : mockSessionAPIService}],
+      {provide: SessionApiService, useValue : mockSessionAPIService},
+      {provide: TeacherService, useValue : mockTeacherService}],
     })
       .compileComponents();
     service = TestBed.inject(SessionService);
@@ -74,6 +76,10 @@ describe('DetailComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should fetch expected teacher & session', () => {
+    
+  })
 
   it('should go back in history when clicking on the back button', () => {
     component.sessionId = "1"
