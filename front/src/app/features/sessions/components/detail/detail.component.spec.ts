@@ -47,7 +47,7 @@ describe('DetailComponent', () => {
 
   const mockSessionService = {
     sessionInformation: {
-      admin: true,
+      admin: false, // had to switch to false
       id: userId
     }
   }
@@ -112,13 +112,21 @@ describe('DetailComponent', () => {
     expect(windowHistorySpy).toHaveBeenCalled()
   })
 
-  it('participate button clicked', () => {
-    session.users = [2,3]
+  it('if not admin, button participate should be available and working', () => { // !!!! to fix
+    component.sessionId = "1"
+    component.userId = "1"
+    session.users = [2, 3]
+    // component.isAdmin = false
+    fixture.detectChanges();
     const buttons = fixture.debugElement.queryAll(By.css('button'))
-    const participateButton = buttons[2]
+    expect(buttons.length).toBe(2)
+    const participateButton = buttons[1]
     participateButton.triggerEventHandler('click', null)
     expect(mockSessionAPIService.participate).toHaveBeenCalled()
+    expect(session.users.includes(userId)).toBeTruthy()    
   })
+
+  // should be able to participate / unparticipate only if non admin
   
 });
 
