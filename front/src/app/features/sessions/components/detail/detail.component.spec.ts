@@ -123,9 +123,8 @@ describe('DetailComponent', () => {
   })
 
   it('should go back in history when clicking on the back button', () => {
-    component.sessionId = "1"
     const windowHistorySpy = jest.spyOn(window.history, 'back')
-    const backButton = fixture.debugElement.query(By.css('button'))
+    const backButton = fixture.debugElement.query(By.css('button[mat-icon-button]'))
     backButton.triggerEventHandler('click', null)
     expect(windowHistorySpy).toHaveBeenCalled()
   })
@@ -138,7 +137,7 @@ describe('DetailComponent', () => {
     // fixture.detectChanges();
     const buttons = fixture.debugElement.queryAll(By.css('button'))
     expect(buttons.length).toBe(2)
-    const participateButton = buttons[1]
+    const participateButton = fixture.debugElement.query(By.css('button[color="primary"]'))
     participateButton.triggerEventHandler('click', null)
     expect(mockSessionAPIService.participate).toHaveBeenCalled()
     expect(session.users.includes(userId)).toBeTruthy()    
@@ -149,7 +148,7 @@ describe('DetailComponent', () => {
     fixture.detectChanges()
     const buttons = fixture.debugElement.queryAll(By.css('button'))
     expect(buttons.length).toBe(2)
-    const unparticipateButton = buttons[1]
+    const unparticipateButton = /*buttons[1]*/ fixture.debugElement.query(By.css('button[color="warn"]'))
     unparticipateButton.triggerEventHandler('click', null)
     expect(mockSessionAPIService.unParticipate).toHaveBeenCalled()
     expect(session.users.includes(userId)).toBeFalsy()    
@@ -162,12 +161,15 @@ describe('DetailComponent', () => {
     mockSessionService.sessionInformation.admin = true;
     fixture.detectChanges()
     const buttons = fixture.debugElement.queryAll(By.css('button'))
-    const deleteButton = buttons[1]
+    const deleteButton = /*buttons[1]*/ fixture.debugElement.query(By.css('button[color="warn"]'))
     deleteButton.triggerEventHandler('click', null)
     expect(mockSessionAPIService.delete).toHaveBeenCalledWith(session.id)
     expect(router.navigate).toHaveBeenCalledWith(['sessions'])
     expect(snackBarMock.open).toHaveBeenCalledWith('Session deleted !', 'Close', { duration: 3000 })
   })
   
+  // tester tous les autres affichages conditionnels (ngif)
+
+
 })
 
