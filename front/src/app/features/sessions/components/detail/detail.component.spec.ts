@@ -12,6 +12,11 @@ import { Session } from '../../interfaces/session.interface';
 import { of } from 'rxjs';
 import { SessionApiService } from '../../services/session-api.service';
 import { TeacherService } from 'src/app/services/teacher.service';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 
 const session : Session = {
@@ -38,15 +43,26 @@ describe('DetailComponent', () => {
   let fixture: ComponentFixture<DetailComponent>; 
   let service: SessionService;
 
+  const userId = 1
+
   const mockSessionService = {
     sessionInformation: {
       admin: true,
-      id: 1
+      id: userId
     }
   }
 
   const mockSessionAPIService = {
-    detail : jest.fn(() => of(session))
+    detail : jest.fn(() => of(session)),
+    participate : jest.fn(() => {
+      // adds the current user to the session participants
+      if(!session.users.includes(userId)) session.users.push(userId)
+      return of(void 0)
+    }),
+    unParticipate : jest.fn(() => {
+      if(session.users.includes(userId)) session.users.pop()
+      return of(void 0)
+    })
   }
 
   const mockTeacherService = {
@@ -58,7 +74,13 @@ describe('DetailComponent', () => {
       imports: [
         RouterTestingModule,
         HttpClientModule,
+        MatCardModule,
+        MatIconModule,
+        MatFormFieldModule,
+        MatInputModule,
+        ReactiveFormsModule, 
         MatSnackBarModule,
+        MatSelectModule,
         ReactiveFormsModule
       ],
       declarations: [DetailComponent], 
@@ -77,7 +99,7 @@ describe('DetailComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should fetch expected teacher & session', () => {
+  it('should fetch expected teacher & session and display those', () => {
     expect(component.teacher).toEqual(teacher)
     expect(component.session).toEqual(session)
   })
@@ -90,6 +112,13 @@ describe('DetailComponent', () => {
     expect(windowHistorySpy).toHaveBeenCalled()
   })
 
+  it('participate button clicked', () => {
+    session.users = [2,3]
+    const buttons = fixture.debugElement.queryAll(By.css('button'))
+    const participateButton = buttons[2]
+    participateButton.triggerEventHandler('click', null)
+    expect(mockSessionAPIService.participate).toHaveBeenCalled()
+  })
   
 });
 

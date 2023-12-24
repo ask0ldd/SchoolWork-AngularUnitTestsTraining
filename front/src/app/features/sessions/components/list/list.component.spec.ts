@@ -93,7 +93,7 @@ describe('ListComponent', () => {
     expect(component).toBeTruthy()
     expect(mockSessionAPIService.all).toHaveBeenCalled()
     expect(fixture.debugElement.queryAll(By.css('.item')).length).toEqual(2)
-    const item1 = fixture.debugElement.queryAll(By.css('.item'))[0]
+    const item1 = fixture.debugElement.queryAll(By.css('.item'))[0] // improve with find
     const item2 = fixture.debugElement.queryAll(By.css('.item'))[1]
     expect(item1.queryAll(By.css('mat-card-title'))[0].nativeElement.textContent).toEqual(session1.name)
     expect(item2.queryAll(By.css('mat-card-title'))[0].nativeElement.textContent).toEqual(session2.name)
