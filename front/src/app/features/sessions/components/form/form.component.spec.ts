@@ -19,34 +19,35 @@ import { Session } from '../../interfaces/session.interface';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
 
-const session : Session = {
-  id : 1,
-  name : 'name',
-  description : 'description',
-  date : new Date("10/10/2023"),
-  teacher_id : 1,
-  users : [2, 3],
-  createdAt : new Date(),
-  updatedAt : new Date(),
-}
-
-const shortSession = {
-  name : 'name',
-  description : 'description',
-  date : new Date("10/10/2023"),
-  teacher_id : 1,
-}
-
-const sessionApiServiceMock = {
-  create : jest.fn((session : Session) => of(session)),
-  update : jest.fn((id : string | undefined, session : Session) => of(session)),
-}
-
-const snackBarMock = {
-  open : jest.fn()
-}
-
 describe('FormComponent', () => {
+
+  const session : Session = {
+    id : 1,
+    name : 'name',
+    description : 'description',
+    date : new Date("10/10/2023"),
+    teacher_id : 1,
+    users : [2, 3],
+    createdAt : new Date(),
+    updatedAt : new Date(),
+  }
+  
+  const shortSession = {
+    name : 'name',
+    description : 'description',
+    date : new Date("10/10/2023"),
+    teacher_id : 1,
+  }
+  
+  const sessionApiServiceMock = {
+    create : jest.fn((session : Session) => of(session)),
+    update : jest.fn((id : string | undefined, session : Session) => of(session)),
+  }
+  
+  const snackBarMock = {
+    open : jest.fn()
+  }
+
   let component: FormComponent;
   let fixture: ComponentFixture<FormComponent>;
 
@@ -191,6 +192,7 @@ describe('FormComponent', () => {
     component.onUpdate = true // !!! should use router instead with update into url
 
     const router = TestBed.inject(Router) // retrieve an instance of a service from the TestBed's injector
+    // router = jest.mock('url', () => { return null })
     const matSnackBar = TestBed.inject(MatSnackBarModule)
 
     const compiled = fixture.nativeElement as HTMLElement
