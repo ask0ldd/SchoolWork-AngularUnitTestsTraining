@@ -78,7 +78,8 @@ describe('DetailComponent', () => {
   });
 
   it('should fetch expected teacher & session', () => {
-    
+    expect(component.teacher).toEqual(teacher)
+    expect(component.session).toEqual(session)
   })
 
   it('should go back in history when clicking on the back button', () => {
