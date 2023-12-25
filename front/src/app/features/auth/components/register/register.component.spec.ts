@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { expect } from '@jest/globals';
 
 import { RegisterComponent } from './register.component';
+import { By } from '@angular/platform-browser';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
@@ -37,4 +38,10 @@ describe('RegisterComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should display a disabled submit button if the form is incomplete', () => {
+    const submitButton = fixture.debugElement.query(By.css('button[color="primary"]'))
+    expect((submitButton.nativeElement as HTMLButtonElement).disabled).toBeTruthy()
+  });
+
 });

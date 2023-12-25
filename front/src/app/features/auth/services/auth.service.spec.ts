@@ -32,32 +32,32 @@ describe('YourServiceName', () => {
     const pathService = 'api/auth'
   
     beforeEach(() => {
-      TestBed.configureTestingModule({
-        imports: [HttpClientModule],
-        providers: [AuthService],
-      });
-      authService = TestBed.inject(AuthService);
-      httpClient = TestBed.inject(HttpClient);
+        TestBed.configureTestingModule({
+            imports: [HttpClientModule],
+            providers: [AuthService],
+        });
+        authService = TestBed.inject(AuthService);
+        httpClient = TestBed.inject(HttpClient);
     });
   
     it('should be created', () => {
-      expect(authService).toBeTruthy();
+        expect(authService).toBeTruthy();
     });
   
     it('should make a POST request to the login endpoint', () => {
 
-      const loginRequest: LoginRequest = {
-          email: "email@email.com",
-          password: "password"
-      }
-      const expectedUrl = `${pathService}/login`
- 
-      jest.spyOn(httpClient, 'post').mockReturnValue(of(sessionInformation))
-  
-      authService.login(loginRequest).subscribe((response) => {
+        const loginRequest: LoginRequest = {
+            email: "email@email.com",
+            password: "password"
+        }
+        const expectedUrl = `${pathService}/login`
+
+        jest.spyOn(httpClient, 'post').mockReturnValue(of(sessionInformation))
+
+        authService.login(loginRequest).subscribe((response) => {
         expect(httpClient.post).toHaveBeenCalledWith(expectedUrl, loginRequest)
         expect(response).toEqual(sessionInformation)
-      })
+        })
     })
 
-  });
+});
