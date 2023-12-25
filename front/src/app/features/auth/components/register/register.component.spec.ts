@@ -114,6 +114,7 @@ describe('RegisterComponent', () => {
     form.triggerEventHandler('submit', null)
     expect(submitFn).toHaveBeenCalled()
     expect(authService.register).toHaveBeenCalledWith(component.form.value as RegisterRequest)
+    expect(router.navigate).toHaveBeenCalledWith(['/login'])
   })
 
 
