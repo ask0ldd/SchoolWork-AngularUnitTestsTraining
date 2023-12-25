@@ -41,7 +41,18 @@ describe('RegisterComponent', () => {
 
   it('should display a disabled submit button if the form is incomplete', () => {
     const submitButton = fixture.debugElement.query(By.css('button[color="primary"]'))
-    expect((submitButton.nativeElement as HTMLButtonElement).disabled).toBeTruthy()
-  });
+    expect(submitButton.properties['disabled']).toBeTruthy()
+  })
+
+  it('should display a functional submit button if the form is complete and valid', () => {
+    const submitButton = fixture.debugElement.query(By.css('button[color="primary"]'))
+    const formInputs = fixture.debugElement.queryAll(By.css('input'))
+    formInputs[0].triggerEventHandler('input',  { target: { value: 'firstname'}})
+    formInputs[1].triggerEventHandler('input',  { target: { value: 'lastname'}})
+    formInputs[2].triggerEventHandler('input',  { target: { value: 'firstname.lastname@email.com'}})
+    formInputs[3].triggerEventHandler('input',  { target: { value: 'randompassword123'}})
+    fixture.detectChanges()
+    expect(submitButton.properties['disabled']).toBeFalsy()
+  })
 
 });
