@@ -17,10 +17,10 @@ import { Router } from '@angular/router';
 
 const mockSessionService = {
   sessionInformation: {
-    admin: true,
+    admin: false,
     id: 1
   },
-  logOut : () => void 0
+  logOut : jest.fn()
 }
 
 const mockUserService = {
@@ -29,12 +29,12 @@ const mockUserService = {
     email: 'email@email.com',
     lastName: 'lastname',
     firstName: 'firstname',
-    admin: true,
+    admin: false,
     password: 'password',
     createdAt: new Date(),
     updatedAt: new Date(),
   }),
-  delete : () => of(void 0)
+  delete : jest.fn((id) => of(void 0))
 }
 
 const snackBarMock = {
@@ -82,10 +82,12 @@ describe('MeComponent', () => {
   })
 
   it('delete my account button should be displayed and working', () => {
+    // mockSessionService.sessionInformation.admin = false
+    // fixture.detectChanges()
     router.navigate = jest.fn()
     const deleteAccountButton = fixture.debugElement.query(By.css('button[color="warn"]'))
     deleteAccountButton.triggerEventHandler('click', null)
-    expect(mockUserService.delete).toHaveBeenCalledWith(mockSessionService.sessionInformation!.id.toString())
+    expect(mockUserService.delete).toHaveBeenCalledWith(mockSessionService.sessionInformation.id.toString())
     expect(router.navigate).toHaveBeenCalledWith(['sessions'])
     expect(snackBarMock.open).toHaveBeenCalledWith('Session deleted !', 'Close', { duration: 3000 })
     expect(mockSessionService.logOut).toHaveBeenCalled()
