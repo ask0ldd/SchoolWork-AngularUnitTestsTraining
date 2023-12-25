@@ -4,7 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { SessionService } from 'src/app/services/session.service';
 
 import { MeComponent } from './me.component';
@@ -61,12 +61,12 @@ describe('MeComponent', () => {
       providers: [
         { provide: SessionService, useValue: mockSessionService },
         { provide: UserService, useValue: mockUserService },
+        { provide: MatSnackBar, useValue : snackBarMock },
       ],
     })
       .compileComponents();
     fixture = TestBed.createComponent(MeComponent);
     component = fixture.componentInstance;
-    router = TestBed.inject(Router)
     fixture.detectChanges();
   });
 
@@ -82,15 +82,15 @@ describe('MeComponent', () => {
   })
 
   it('delete my account button should be displayed and working', () => {
-    // mockSessionService.sessionInformation.admin = false
-    // fixture.detectChanges()
+    const router = TestBed.inject(Router)
     router.navigate = jest.fn()
+    fixture.detectChanges()
     const deleteAccountButton = fixture.debugElement.query(By.css('button[color="warn"]'))
     deleteAccountButton.triggerEventHandler('click', null)
     expect(mockUserService.delete).toHaveBeenCalledWith(mockSessionService.sessionInformation.id.toString())
-    expect(router.navigate).toHaveBeenCalledWith(['sessions'])
-    expect(snackBarMock.open).toHaveBeenCalledWith('Session deleted !', 'Close', { duration: 3000 })
+    expect(snackBarMock.open).toHaveBeenCalledWith("Your account has been deleted !", 'Close', { duration: 3000 })
     expect(mockSessionService.logOut).toHaveBeenCalled()
+    expect(router.navigate).toHaveBeenCalledWith(['/'])
   })
 
 })
