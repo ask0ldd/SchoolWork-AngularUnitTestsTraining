@@ -81,4 +81,14 @@ describe('MeComponent', () => {
     expect(windowHistorySpy).toHaveBeenCalled()
   })
 
+  it('delete my account button should be displayed and working', () => {
+    router.navigate = jest.fn()
+    const deleteAccountButton = fixture.debugElement.query(By.css('button[color="warn"]'))
+    deleteAccountButton.triggerEventHandler('click', null)
+    expect(mockUserService.delete).toHaveBeenCalledWith(mockSessionService.sessionInformation!.id.toString())
+    expect(router.navigate).toHaveBeenCalledWith(['sessions'])
+    expect(snackBarMock.open).toHaveBeenCalledWith('Session deleted !', 'Close', { duration: 3000 })
+    expect(mockSessionService.logOut).toHaveBeenCalled()
+  })
+
 })
