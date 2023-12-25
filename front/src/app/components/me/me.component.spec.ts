@@ -10,6 +10,9 @@ import { SessionService } from 'src/app/services/session.service';
 import { MeComponent } from './me.component';
 import { of } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
+import { By } from '@angular/platform-browser';
+import { expect } from '@jest/globals';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('MeComponent', () => {
   let component: MeComponent;
@@ -39,6 +42,7 @@ describe('MeComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [MeComponent],
       imports: [
+        RouterTestingModule,
         MatSnackBarModule,
         HttpClientModule,
         MatCardModule,
@@ -61,8 +65,11 @@ describe('MeComponent', () => {
     expect(component).toBeTruthy()
   })
 
-  it('should create', () => {
-    expect(component).toBeTruthy()
+  it('should go back in history when clicking on the back button', () => {
+    const windowHistorySpy = jest.spyOn(window.history, 'back')
+    const backButton = fixture.debugElement.query(By.css('button[mat-icon-button]'))
+    backButton.triggerEventHandler('click', null)
+    expect(windowHistorySpy).toHaveBeenCalled()
   })
 
 })
