@@ -13,30 +13,38 @@ import { UserService } from 'src/app/services/user.service';
 import { By } from '@angular/platform-browser';
 import { expect } from '@jest/globals';
 import { RouterTestingModule } from '@angular/router/testing';
+import { Router } from '@angular/router';
+
+const mockSessionService = {
+  sessionInformation: {
+    admin: true,
+    id: 1
+  },
+  logOut : () => void 0
+}
+
+const mockUserService = {
+  getById : (id : string) => of({
+    id: 1,
+    email: 'email@email.com',
+    lastName: 'lastname',
+    firstName: 'firstname',
+    admin: true,
+    password: 'password',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  }),
+  delete : () => of(void 0)
+}
+
+const snackBarMock = {
+  open : jest.fn()
+}
 
 describe('MeComponent', () => {
   let component: MeComponent;
   let fixture: ComponentFixture<MeComponent>;
-
-  const mockSessionService = {
-    sessionInformation: {
-      admin: true,
-      id: 1
-    }
-  }
-
-  const mockUserService = {
-    getById : (id : string) => of({
-      id: 1,
-      email: 'email@email.com',
-      lastName: 'lastname',
-      firstName: 'firstname',
-      admin: true,
-      password: 'password',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    })
-  }
+  let router : Router
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -58,6 +66,7 @@ describe('MeComponent', () => {
       .compileComponents();
     fixture = TestBed.createComponent(MeComponent);
     component = fixture.componentInstance;
+    router = TestBed.inject(Router)
     fixture.detectChanges();
   });
 
