@@ -119,8 +119,6 @@ describe('RegisterComponent', () => {
 
   test('if the form is complete but invalid, should display an error', () => {
     const router = TestBed.inject(Router)
-    // authServiceMock.register.mockReturnValue(of(new Error('Error message')))
-    // authService.register = jest.fn(() : Observable<any> => of(new Error('Error message')))
     const authService = TestBed.inject(AuthService)
     const authServiceSpy = jest.spyOn(authService, 'register')
     authServiceSpy.mockReturnValue(throwError(new Error('Error message')))
@@ -138,19 +136,9 @@ describe('RegisterComponent', () => {
     expect(submitFn).toHaveBeenCalled()
     expect(authService.register).toHaveBeenCalledWith(component.form.value as RegisterRequest)
     expect(component.onError).toBeTruthy()
-  })
-
-  // do form invalid this.onError
-
-  /*it('should display a disabled submit button if firstname is invalid', () => {
-    const submitButton = fixture.debugElement.query(By.css('button[color="primary"]'))
-    const formInputs = fixture.debugElement.queryAll(By.css('input'))
-    formInputs[0].triggerEventHandler('input', { target: { value: 'firstname******************************************************************'}})
-    formInputs[1].triggerEventHandler('input', { target: { value: 'lastname'}})
-    formInputs[2].triggerEventHandler('input', { target: { value: 'firstname.lastname@email.com'}})
-    formInputs[3].triggerEventHandler('input', { target: { value: 'randompassword123'}})
     fixture.detectChanges()
-    expect(submitButton.properties['disabled']).toBeTruthy()
-  })*/
+    const errorSpan = fixture.debugElement.query(By.css('.error'))
+    expect(errorSpan).toBeTruthy()
+  })
 
 });
