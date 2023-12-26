@@ -10,7 +10,7 @@ import { expect } from '@jest/globals';
 
 import { RegisterComponent } from './register.component';
 import { By } from '@angular/platform-browser';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { SessionInformation } from 'src/app/interfaces/sessionInformation.interface';
 import { RegisterRequest } from '../../interfaces/registerRequest.interface';
 import { AuthService } from '../../services/auth.service';
@@ -38,7 +38,7 @@ const sessionInformation : SessionInformation = {
 
 const authServiceMock = {
   login: jest.fn(() => of(sessionInformation)),
-  register: jest.fn((registerRequest : RegisterRequest) => of(void 0))
+  register: jest.fn(() : Observable<any> => of(void 0))
 }
 
 const sessionServiceMock = {
@@ -119,11 +119,15 @@ describe('RegisterComponent', () => {
 
   test('if the form is complete but invalid, should display an error', () => {
     const router = TestBed.inject(Router)
+    // authServiceMock.register.mockReturnValue(of(new Error('Error message')))
     const authService = TestBed.inject(AuthService)
+    // authService.register = jest.fn(() : Observable<any> => of(new Error('Error message')))
+    const authServiceSpy = jest.spyOn(authService, 'register')
+    authServiceSpy.mockReturnValue(of(new Error('Error message')))
     const submitFn = jest.spyOn(component, 'submit')
     const submitButton = fixture.debugElement.query(By.css('button[color="primary"]'))
     const formInputs = fixture.debugElement.queryAll(By.css('input'))
-    formInputs[0].triggerEventHandler('input', { target: { value: '**'}})
+    formInputs[0].triggerEventHandler('input', { target: { value: '*'}})
     formInputs[1].triggerEventHandler('input', { target: { value: 'lastname'}})
     formInputs[2].triggerEventHandler('input', { target: { value: 'firstname.lastname@email.com'}})
     formInputs[3].triggerEventHandler('input', { target: { value: 'randompassword123'}})
@@ -133,7 +137,6 @@ describe('RegisterComponent', () => {
     form.triggerEventHandler('submit', null)
     expect(submitFn).toHaveBeenCalled()
     expect(authService.register).toHaveBeenCalledWith(component.form.value as RegisterRequest)
-    fixture.detectChanges()
     expect(component.onError).toBeTruthy()
   })
 
