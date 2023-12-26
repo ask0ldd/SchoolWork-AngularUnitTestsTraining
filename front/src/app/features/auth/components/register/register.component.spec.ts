@@ -10,7 +10,7 @@ import { expect } from '@jest/globals';
 
 import { RegisterComponent } from './register.component';
 import { By } from '@angular/platform-browser';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { SessionInformation } from 'src/app/interfaces/sessionInformation.interface';
 import { RegisterRequest } from '../../interfaces/registerRequest.interface';
 import { AuthService } from '../../services/auth.service';
@@ -120,10 +120,10 @@ describe('RegisterComponent', () => {
   test('if the form is complete but invalid, should display an error', () => {
     const router = TestBed.inject(Router)
     // authServiceMock.register.mockReturnValue(of(new Error('Error message')))
-    const authService = TestBed.inject(AuthService)
     // authService.register = jest.fn(() : Observable<any> => of(new Error('Error message')))
+    const authService = TestBed.inject(AuthService)
     const authServiceSpy = jest.spyOn(authService, 'register')
-    authServiceSpy.mockReturnValue(of(new Error('Error message')))
+    authServiceSpy.mockReturnValue(throwError(new Error('Error message')))
     const submitFn = jest.spyOn(component, 'submit')
     const submitButton = fixture.debugElement.query(By.css('button[color="primary"]'))
     const formInputs = fixture.debugElement.queryAll(By.css('input'))
