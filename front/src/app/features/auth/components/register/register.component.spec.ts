@@ -98,7 +98,7 @@ describe('RegisterComponent', () => {
     expect(submitButton.properties['disabled']).toBeFalsy()
   })
 
-  it('should redirect to the login page if the form is complete and valid', () => {
+  test('if the form is complete / valid, should be redirected to login when submitted', () => {
     const router = TestBed.inject(Router)
     const authService = TestBed.inject(AuthService)
     const submitFn = jest.spyOn(component, 'submit')
@@ -117,6 +117,27 @@ describe('RegisterComponent', () => {
     expect(router.navigate).toHaveBeenCalledWith(['/login'])
   })
 
+  test('if the form is complete but invalid, should display an error', () => {
+    const router = TestBed.inject(Router)
+    const authService = TestBed.inject(AuthService)
+    const submitFn = jest.spyOn(component, 'submit')
+    const submitButton = fixture.debugElement.query(By.css('button[color="primary"]'))
+    const formInputs = fixture.debugElement.queryAll(By.css('input'))
+    formInputs[0].triggerEventHandler('input', { target: { value: '**'}})
+    formInputs[1].triggerEventHandler('input', { target: { value: 'lastname'}})
+    formInputs[2].triggerEventHandler('input', { target: { value: 'firstname.lastname@email.com'}})
+    formInputs[3].triggerEventHandler('input', { target: { value: 'randompassword123'}})
+    fixture.detectChanges()
+    expect(submitButton.properties['disabled']).toBeFalsy()
+    const form = fixture.debugElement.query(By.css('form'))
+    form.triggerEventHandler('submit', null)
+    expect(submitFn).toHaveBeenCalled()
+    expect(authService.register).toHaveBeenCalledWith(component.form.value as RegisterRequest)
+    fixture.detectChanges()
+    expect(component.onError).toBeTruthy()
+  })
+
+  // do form invalid this.onError
 
   /*it('should display a disabled submit button if firstname is invalid', () => {
     const submitButton = fixture.debugElement.query(By.css('button[color="primary"]'))
