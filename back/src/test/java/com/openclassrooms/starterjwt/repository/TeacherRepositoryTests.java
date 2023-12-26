@@ -55,5 +55,8 @@ public class TeacherRepositoryTests {
         Assertions.assertThat(teacher1).isNotNull();
         Assertions.assertThat(teacher1.getFirstName()).isEqualTo("Margot");
         Assertions.assertThat(teacher1.getLastName()).isEqualTo("DELAHAYE");
+        Assertions.assertThat(teacher2).isNotNull();
+        Assertions.assertThat(teacher2.getFirstName()).isEqualTo("Hélène");
+        Assertions.assertThat(teacher2.getLastName()).isEqualTo("THIERCELIN");
     }
 }
