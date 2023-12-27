@@ -1,7 +1,6 @@
 package com.openclassrooms.starterjwt.repository;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +27,7 @@ public class TeacherRepositoryTests {
     private LocalDateTime date;
 
     @Test
+    @DisplayName("Save() saves a Teacher")
     public void SaveTeacher_ReturnSavedTeacher() {
         date = LocalDateTime.now();
         teacher1 = Teacher.builder().firstName("firstname").lastName("lastname").id(3L).createdAt(date)
@@ -42,11 +42,13 @@ public class TeacherRepositoryTests {
         Assertions.assertThat(collectedTeacher.get().getFirstName()).isEqualTo(teacher1.getFirstName());
         Assertions.assertThat(collectedTeacher.get().getLastName()).isEqualTo(teacher1.getLastName());
         teacherRepository.delete(teacher1);
+        System.out.println("ici : " + collectedTeacher.get());
         // !!! test if not in db anymore
     }
+    // testSave(row, )
 
     @Test
-    @DisplayName("FindAll() returns the 2 expected Messages.")
+    @DisplayName("FindAll() returns the 2 expected Teachers.")
     public void FindAllTeachers() {
         List<Teacher> teachers = teacherRepository.findAll();
         Iterator<Teacher> it = teachers.iterator();
@@ -58,5 +60,15 @@ public class TeacherRepositoryTests {
         Assertions.assertThat(teacher2).isNotNull();
         Assertions.assertThat(teacher2.getFirstName()).isEqualTo("Hélène");
         Assertions.assertThat(teacher2.getLastName()).isEqualTo("THIERCELIN");
+    }
+
+    @DisplayName("FindById() returns the expected Teacher")
+    @Test
+    public void findById_ReturnOneTargetRental() {
+        Optional<Teacher> teacher = teacherRepository.findById(1L);
+        Assertions.assertThat(teacher.isPresent()).isTrue();
+        Assertions.assertThat(teacher.get().getId()).isEqualTo(1L);
+        Assertions.assertThat(teacher.get().getFirstName()).isEqualTo("Margot");
+        Assertions.assertThat(teacher.get().getLastName()).isEqualTo("DELAHAYE");
     }
 }
