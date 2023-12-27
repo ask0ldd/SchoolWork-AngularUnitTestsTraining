@@ -24,6 +24,7 @@ public class TeacherRepositoryTests {
     TeacherRepository teacherRepository;
 
     private Teacher teacher1;
+    private Teacher teacherReplacement;
     private LocalDateTime date;
 
     @Test
@@ -83,5 +84,28 @@ public class TeacherRepositoryTests {
         teacherRepository.deleteById(teacher.get().getId());
         Optional<Teacher> postDeletionCollectedTeacher = teacherRepository.findById(3L);
         Assertions.assertThat(postDeletionCollectedTeacher.isEmpty()).isTrue();
+    }
+
+    @DisplayName("Update() replaces the expected Rental")
+    @Test
+    public void update_ReplaceTheExpectedRental() {
+        teacher1 = Teacher.builder().firstName("firstname").lastName("lastname").id(3L).createdAt(date)
+                .updatedAt(date).build();
+        teacherRepository.save(teacher1);
+        Optional<Teacher> teacher = teacherRepository.findById(3L);
+        Assertions.assertThat(teacher.get().getId()).isEqualTo(3L);
+        Assertions.assertThat(teacher.get().getFirstName()).isEqualTo("firstname");
+        Assertions.assertThat(teacher.get().getLastName()).isEqualTo("lastname");
+
+        teacherReplacement = Teacher.builder().firstName("firstnameRep").lastName("lastnameRep").id(3L).createdAt(date)
+                .updatedAt(date).build();
+        teacherRepository.save(teacherReplacement);
+        Optional<Teacher> postUpdateCollectedTeacher = teacherRepository.findById(3L);
+        Assertions.assertThat(postUpdateCollectedTeacher.get().getId()).isEqualTo(3L);
+        Assertions.assertThat(postUpdateCollectedTeacher.get().getFirstName())
+                .isEqualTo(teacherReplacement.getFirstName());
+        Assertions.assertThat(postUpdateCollectedTeacher.get().getLastName())
+                .isEqualTo(teacherReplacement.getLastName());
+
     }
 }
