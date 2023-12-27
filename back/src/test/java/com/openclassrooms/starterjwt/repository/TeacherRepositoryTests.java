@@ -1,5 +1,6 @@
 package com.openclassrooms.starterjwt.repository;
 
+import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
@@ -65,7 +66,7 @@ public class TeacherRepositoryTests {
 
     @DisplayName("FindById() returns the expected Teacher")
     @Test
-    public void findById_ReturnOneTargetRental() {
+    public void findById_ReturnOneTargetTeacher() {
         Optional<Teacher> teacher = teacherRepository.findById(1L);
         Assertions.assertThat(teacher.isPresent()).isTrue();
         Assertions.assertThat(teacher.get().getId()).isEqualTo(1L);
@@ -86,11 +87,15 @@ public class TeacherRepositoryTests {
         Assertions.assertThat(postDeletionCollectedTeacher.isEmpty()).isTrue();
     }
 
-    @DisplayName("Update() replaces the expected Rental")
+    @DisplayName("Update() replaces the expected Teacher")
     @Test
-    public void update_ReplaceTheExpectedRental() {
+    public void update_ReplaceTheExpectedTeacher() {
         teacher1 = Teacher.builder().firstName("firstname").lastName("lastname").id(3L).createdAt(date)
                 .updatedAt(date).build();
+        // Method[] methods = Teacher.class.getMethods();
+        // for (Method method : methods) {
+        // System.out.println(method.getName());
+        // }
         teacherRepository.save(teacher1);
         Optional<Teacher> teacher = teacherRepository.findById(3L);
         Assertions.assertThat(teacher.get().getId()).isEqualTo(3L);
@@ -106,6 +111,5 @@ public class TeacherRepositoryTests {
                 .isEqualTo(teacherReplacement.getFirstName());
         Assertions.assertThat(postUpdateCollectedTeacher.get().getLastName())
                 .isEqualTo(teacherReplacement.getLastName());
-
     }
 }
