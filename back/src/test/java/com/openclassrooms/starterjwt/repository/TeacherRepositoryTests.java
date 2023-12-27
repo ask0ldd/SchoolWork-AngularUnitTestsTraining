@@ -71,4 +71,17 @@ public class TeacherRepositoryTests {
         Assertions.assertThat(teacher.get().getFirstName()).isEqualTo("Margot");
         Assertions.assertThat(teacher.get().getLastName()).isEqualTo("DELAHAYE");
     }
+
+    @DisplayName("Delete() returns an empty Optional")
+    @Test
+    public void delete_ReturnAnEmptyOptional() {
+        teacher1 = Teacher.builder().firstName("firstname").lastName("lastname").id(3L).createdAt(date)
+                .updatedAt(date).build();
+        teacherRepository.save(teacher1);
+        Optional<Teacher> teacher = teacherRepository.findById(3L);
+        Assertions.assertThat(teacher.isPresent()).isTrue();
+        teacherRepository.deleteById(teacher.get().getId());
+        Optional<Teacher> postDeletionCollectedTeacher = teacherRepository.findById(3L);
+        Assertions.assertThat(postDeletionCollectedTeacher.isEmpty()).isTrue();
+    }
 }
