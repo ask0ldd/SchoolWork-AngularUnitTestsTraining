@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
+import com.openclassrooms.starterjwt.models.Teacher;
 import com.openclassrooms.starterjwt.models.User;
 
 @SpringBootTest(classes = { com.openclassrooms.starterjwt.SpringBootSecurityJwtApplication.class })
@@ -52,19 +53,30 @@ public class UserRepositoryTests {
         user1 = User.builder().id(2L).firstName("firstname").lastName("lastname").password("password")
                 .email("email@email.com").build();
         userRepository.save(user1);
-        List<User> Users = userRepository.findAll();
-        Iterator<User> it = Users.iterator();
-        User User1 = it.next();
-        User User2 = it.next();
-        Assertions.assertThat(User1).isNotNull();
-        Assertions.assertThat(User1.getFirstName()).isEqualTo("Admin");
-        Assertions.assertThat(User1.getLastName()).isEqualTo("Admin");
-        Assertions.assertThat(User1.getEmail()).isEqualTo("yoga@studio.com");
+        List<User> users = userRepository.findAll();
+        Iterator<User> it = users.iterator();
+        User user1 = it.next();
+        User user2 = it.next();
+        Assertions.assertThat(user1).isNotNull();
+        Assertions.assertThat(user1.getFirstName()).isEqualTo("Admin");
+        Assertions.assertThat(user1.getLastName()).isEqualTo("Admin");
+        Assertions.assertThat(user1.getEmail()).isEqualTo("yoga@studio.com");
 
-        Assertions.assertThat(User2).isNotNull();
-        Assertions.assertThat(User2.getFirstName()).isEqualTo("firstname");
-        Assertions.assertThat(User2.getLastName()).isEqualTo("lastname");
-        Assertions.assertThat(User2.getEmail()).isEqualTo("email@email.com");
+        Assertions.assertThat(user2).isNotNull();
+        Assertions.assertThat(user2.getFirstName()).isEqualTo("firstname");
+        Assertions.assertThat(user2.getLastName()).isEqualTo("lastname");
+        Assertions.assertThat(user2.getEmail()).isEqualTo("email@email.com");
+    }
+
+    @DisplayName("FindById() returns the expected Teacher")
+    @Test
+    public void findById_ReturnOneTargetUser() {
+        Optional<User> user1 = userRepository.findById(1L);
+        Assertions.assertThat(user1.isPresent()).isTrue();
+        Assertions.assertThat(user1.get().getId()).isEqualTo(1L);
+        Assertions.assertThat(user1.get().getFirstName()).isEqualTo("Admin");
+        Assertions.assertThat(user1.get().getLastName()).isEqualTo("Admin");
+        Assertions.assertThat(user1.get().getEmail()).isEqualTo("yoga@studio.com");
     }
 
 }
