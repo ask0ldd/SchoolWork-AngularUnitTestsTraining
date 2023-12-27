@@ -1,6 +1,8 @@
 package com.openclassrooms.starterjwt.repository;
 
 import java.time.LocalDateTime;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
@@ -26,7 +28,7 @@ public class UserRepositoryTests {
 
     @Test
     @DisplayName("Save() saves a User")
-    public void SaveTeacher_ReturnSavedTeacher() {
+    public void SaveUser_ReturnSavedUser() {
         date = LocalDateTime.now();
         user1 = User.builder().id(2L).firstName("firstname").lastName("lastname").password("password")
                 .email("email@email.com").build();
@@ -43,4 +45,26 @@ public class UserRepositoryTests {
         System.out.println("ici : " + collectedUser.get());
         // !!! test if not in db anymore
     }
+
+    @Test
+    @DisplayName("FindAll() returns the 2 expected Users.") // !! encrypt password
+    public void FindAllUsers() {
+        user1 = User.builder().id(2L).firstName("firstname").lastName("lastname").password("password")
+                .email("email@email.com").build();
+        userRepository.save(user1);
+        List<User> Users = userRepository.findAll();
+        Iterator<User> it = Users.iterator();
+        User User1 = it.next();
+        User User2 = it.next();
+        Assertions.assertThat(User1).isNotNull();
+        Assertions.assertThat(User1.getFirstName()).isEqualTo("Admin");
+        Assertions.assertThat(User1.getLastName()).isEqualTo("Admin");
+        Assertions.assertThat(User1.getEmail()).isEqualTo("yoga@studio.com");
+
+        Assertions.assertThat(User2).isNotNull();
+        Assertions.assertThat(User2.getFirstName()).isEqualTo("firstname");
+        Assertions.assertThat(User2.getLastName()).isEqualTo("lastname");
+        Assertions.assertThat(User2.getEmail()).isEqualTo("email@email.com");
+    }
+
 }
