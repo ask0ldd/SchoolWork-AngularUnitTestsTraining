@@ -15,8 +15,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 import com.openclassrooms.starterjwt.models.User;
-import com.openclassrooms.starterjwt.models.User;
-import com.openclassrooms.starterjwt.models.User;
 
 @SpringBootTest(classes = { com.openclassrooms.starterjwt.SpringBootSecurityJwtApplication.class })
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)

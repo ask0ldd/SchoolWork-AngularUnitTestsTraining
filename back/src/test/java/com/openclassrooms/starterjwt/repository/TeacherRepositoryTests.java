@@ -1,6 +1,5 @@
 package com.openclassrooms.starterjwt.repository;
 
-import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
@@ -105,11 +104,11 @@ public class TeacherRepositoryTests {
         teacherReplacement = Teacher.builder().firstName("firstnameRep").lastName("lastnameRep").id(3L).createdAt(date)
                 .updatedAt(date).build();
         teacherRepository.save(teacherReplacement);
-        Optional<Teacher> postUpdateCollectedTeacher = teacherRepository.findById(3L);
-        Assertions.assertThat(postUpdateCollectedTeacher.get().getId()).isEqualTo(3L);
-        Assertions.assertThat(postUpdateCollectedTeacher.get().getFirstName())
+        Optional<Teacher> updatedTeacher = teacherRepository.findById(3L);
+        Assertions.assertThat(updatedTeacher.get().getId()).isEqualTo(3L);
+        Assertions.assertThat(updatedTeacher.get().getFirstName())
                 .isEqualTo(teacherReplacement.getFirstName());
-        Assertions.assertThat(postUpdateCollectedTeacher.get().getLastName())
+        Assertions.assertThat(updatedTeacher.get().getLastName())
                 .isEqualTo(teacherReplacement.getLastName());
     }
 }
