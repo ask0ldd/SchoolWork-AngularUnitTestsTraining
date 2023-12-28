@@ -85,4 +85,24 @@ public class SessionRepositoryTests {
                 Assertions.assertThat(retrievedSession2).isNotNull();
                 // more assertions needed
         }
+
+        @DisplayName("FindById() returns the expected Session")
+        @Test
+        public void findById_ReturnOneTargetSession() {
+                teacherRepository.save(teacher1);
+                userRepository.save(user1);
+                userRepository.save(user2);
+                List<User> userList = new ArrayList<>();
+                userList.add(user1);
+                userList.add(user2);
+                Session session = Session.builder().name("name").teacher(teacher1).description("description")
+                                .date(new Date())
+                                .id(1L).users(userList).build();
+                sessionRepository.save(session);
+                Optional<Session> collectedSession = sessionRepository.findById(1L);
+                Assertions.assertThat(collectedSession.get()).isNotNull();
+                Assertions.assertThat(collectedSession.get().getId()).isGreaterThan(0);
+                Assertions.assertThat(collectedSession.get().getId()).isEqualTo(session.getId());
+        }
+
 }
