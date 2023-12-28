@@ -14,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
-import com.openclassrooms.starterjwt.models.Teacher;
+import com.openclassrooms.starterjwt.models.User;
 import com.openclassrooms.starterjwt.models.User;
 
 @SpringBootTest(classes = { com.openclassrooms.starterjwt.SpringBootSecurityJwtApplication.class })
@@ -68,7 +68,7 @@ public class UserRepositoryTests {
         Assertions.assertThat(user2.getEmail()).isEqualTo("email@email.com");
     }
 
-    @DisplayName("FindById() returns the expected Teacher")
+    @DisplayName("FindById() returns the expected User")
     @Test
     public void findById_ReturnOneTargetUser() {
         Optional<User> user1 = userRepository.findById(1L);
@@ -77,6 +77,19 @@ public class UserRepositoryTests {
         Assertions.assertThat(user1.get().getFirstName()).isEqualTo("Admin");
         Assertions.assertThat(user1.get().getLastName()).isEqualTo("Admin");
         Assertions.assertThat(user1.get().getEmail()).isEqualTo("yoga@studio.com");
+    }
+
+    @DisplayName("Delete() returns an empty Optional")
+    @Test
+    public void delete_ReturnAnEmptyOptional() {
+        user1 = User.builder().id(2L).firstName("firstname").lastName("lastname").password("password")
+                .email("email@email.com").build();
+        userRepository.save(user1);
+        Optional<User> User = userRepository.findById(3L);
+        Assertions.assertThat(User.isPresent()).isTrue();
+        userRepository.deleteById(User.get().getId());
+        Optional<User> postDeletionCollectedUser = userRepository.findById(3L);
+        Assertions.assertThat(postDeletionCollectedUser.isEmpty()).isTrue();
     }
 
 }
