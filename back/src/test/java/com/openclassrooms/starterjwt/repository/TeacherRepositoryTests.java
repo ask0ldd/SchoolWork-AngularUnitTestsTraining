@@ -23,16 +23,14 @@ public class TeacherRepositoryTests {
     @Autowired
     TeacherRepository teacherRepository;
 
-    private Teacher teacher1;
+    private LocalDateTime date = LocalDateTime.now();
+    private Teacher teacher1 = Teacher.builder().firstName("firstname").lastName("lastname").id(3L).createdAt(date)
+            .updatedAt(date).build();
     private Teacher teacherReplacement;
-    private LocalDateTime date;
 
     @Test
     @DisplayName("Save() saves a Teacher")
     public void SaveTeacher_ReturnSavedTeacher() {
-        date = LocalDateTime.now();
-        teacher1 = Teacher.builder().firstName("firstname").lastName("lastname").id(3L).createdAt(date)
-                .updatedAt(date).build();
         teacherRepository.save(teacher1);
 
         Optional<Teacher> collectedTeacher = teacherRepository.findById(3L);
@@ -76,8 +74,6 @@ public class TeacherRepositoryTests {
     @DisplayName("Delete() returns an empty Optional")
     @Test
     public void delete_ReturnAnEmptyOptional() {
-        teacher1 = Teacher.builder().firstName("firstname").lastName("lastname").id(3L).createdAt(date)
-                .updatedAt(date).build();
         teacherRepository.save(teacher1);
         Optional<Teacher> teacher = teacherRepository.findById(3L);
         Assertions.assertThat(teacher.isPresent()).isTrue();
@@ -89,8 +85,6 @@ public class TeacherRepositoryTests {
     @DisplayName("Update() replaces the expected Teacher")
     @Test
     public void update_ReplaceTheExpectedTeacher() {
-        teacher1 = Teacher.builder().firstName("firstname").lastName("lastname").id(3L).createdAt(date)
-                .updatedAt(date).build();
         // Method[] methods = Teacher.class.getMethods();
         // for (Method method : methods) {
         // System.out.println(method.getName());
