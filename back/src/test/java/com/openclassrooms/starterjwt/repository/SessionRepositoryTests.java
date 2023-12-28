@@ -24,37 +24,38 @@ import com.openclassrooms.starterjwt.models.User;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class SessionRepositoryTests {
-    @Autowired
-    private SessionRepository sessionRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private TeacherRepository teacherRepository;
+        @Autowired
+        private SessionRepository sessionRepository;
+        @Autowired
+        private UserRepository userRepository;
+        @Autowired
+        private TeacherRepository teacherRepository;
 
-    private LocalDateTime date;
+        private LocalDateTime date = LocalDateTime.now();
 
-    @Test
-    @DisplayName("Save() saves a Session")
-    public void SaveSession_ReturnSavedSession() {
-        date = LocalDateTime.now();
-        Teacher teacher1 = Teacher.builder().firstName("firstname").lastName("lastname").id(3L).createdAt(date)
-                .updatedAt(date).build();
-        teacherRepository.save(teacher1);
-        User user1 = User.builder().id(2L).firstName("firstname").lastName("lastname").password("password")
-                .email("email@email.com").build();
-        User user2 = User.builder().id(3L).firstName("firstname2").lastName("lastname2").password("password2")
-                .email("email2@email.com").build();
-        userRepository.save(user1);
-        userRepository.save(user2);
-        List<User> userList = new ArrayList<>();
-        userList.add(user1);
-        userList.add(user2);
-        Session session = Session.builder().name("name").teacher(teacher1).description("description").date(new Date())
-                .id(1L).users(userList).build();
-        sessionRepository.save(session);
-        Optional<Session> collectedSession = sessionRepository.findById(1L);
-        Assertions.assertThat(collectedSession.get()).isNotNull();
-        Assertions.assertThat(collectedSession.get().getId()).isGreaterThan(0);
-        Assertions.assertThat(collectedSession.get().getId()).isEqualTo(session.getId());
-    }
+        private Teacher teacher1 = Teacher.builder().firstName("firstname").lastName("lastname").id(3L).createdAt(date)
+                        .updatedAt(date).build();
+        private User user1 = User.builder().id(2L).firstName("firstname").lastName("lastname").password("password")
+                        .email("email@email.com").build();
+        private User user2 = User.builder().id(3L).firstName("firstname2").lastName("lastname2").password("password2")
+                        .email("email2@email.com").build();
+
+        @Test
+        @DisplayName("Save() saves a Session")
+        public void SaveSession_ReturnSavedSession() {
+                teacherRepository.save(teacher1);
+                userRepository.save(user1);
+                userRepository.save(user2);
+                List<User> userList = new ArrayList<>();
+                userList.add(user1);
+                userList.add(user2);
+                Session session = Session.builder().name("name").teacher(teacher1).description("description")
+                                .date(new Date())
+                                .id(1L).users(userList).build();
+                sessionRepository.save(session);
+                Optional<Session> collectedSession = sessionRepository.findById(1L);
+                Assertions.assertThat(collectedSession.get()).isNotNull();
+                Assertions.assertThat(collectedSession.get().getId()).isGreaterThan(0);
+                Assertions.assertThat(collectedSession.get().getId()).isEqualTo(session.getId());
+        }
 }
