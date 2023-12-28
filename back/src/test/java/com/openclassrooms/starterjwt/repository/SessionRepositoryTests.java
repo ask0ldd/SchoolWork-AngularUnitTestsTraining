@@ -3,7 +3,7 @@ package com.openclassrooms.starterjwt.repository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +24,7 @@ import com.openclassrooms.starterjwt.models.User;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class SessionRepositoryTests {
+
         @Autowired
         private SessionRepository sessionRepository;
         @Autowired
@@ -57,5 +58,31 @@ public class SessionRepositoryTests {
                 Assertions.assertThat(collectedSession.get()).isNotNull();
                 Assertions.assertThat(collectedSession.get().getId()).isGreaterThan(0);
                 Assertions.assertThat(collectedSession.get().getId()).isEqualTo(session.getId());
+        }
+
+        @Test
+        @DisplayName("FindAll() returns the 2 expected Sessions.")
+        public void FindAllSessions() {
+                teacherRepository.save(teacher1);
+                userRepository.save(user1);
+                userRepository.save(user2);
+                List<User> userList = new ArrayList<>();
+                userList.add(user1);
+                userList.add(user2);
+                Session session1 = Session.builder().name("name").teacher(teacher1).description("description")
+                                .date(new Date())
+                                .id(1L).users(userList).build();
+                sessionRepository.save(session1);
+                Session session2 = Session.builder().name("name2").teacher(teacher1).description("description2")
+                                .date(new Date())
+                                .id(2L).users(userList).build();
+                sessionRepository.save(session2);
+                List<Session> sessions = sessionRepository.findAll();
+                Iterator<Session> it = sessions.iterator();
+                Session retrievedSession1 = it.next();
+                Session retrievedSession2 = it.next();
+                Assertions.assertThat(retrievedSession1).isNotNull();
+                Assertions.assertThat(retrievedSession2).isNotNull();
+                // more assertions needed
         }
 }
