@@ -16,6 +16,7 @@ import org.springframework.test.annotation.DirtiesContext.ClassMode;
 
 import com.openclassrooms.starterjwt.models.User;
 import com.openclassrooms.starterjwt.models.User;
+import com.openclassrooms.starterjwt.models.User;
 
 @SpringBootTest(classes = { com.openclassrooms.starterjwt.SpringBootSecurityJwtApplication.class })
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -92,4 +93,28 @@ public class UserRepositoryTests {
         Assertions.assertThat(postDeletionCollectedUser.isEmpty()).isTrue();
     }
 
+    @DisplayName("Update() replaces the expected User")
+    @Test
+    public void update_ReplaceTheExpectedUser() {
+        user1 = User.builder().id(2L).firstName("firstname").lastName("lastname").password("password")
+                .email("email@email.com").build();
+        userRepository.save(user1);
+        Optional<User> user = userRepository.findById(2L);
+        Assertions.assertThat(user.get().getId()).isEqualTo(2L);
+        Assertions.assertThat(user.get().getFirstName()).isEqualTo("firstname");
+        Assertions.assertThat(user.get().getLastName()).isEqualTo("lastname");
+        Assertions.assertThat(user.get().getEmail()).isEqualTo("email@email.com");
+
+        User userReplacement = User.builder().id(2L).firstName("firstnameRep").lastName("lastnameRep")
+                .password("passwordRep")
+                .email("emailRep@email.com").build();
+        userRepository.save(userReplacement);
+        Optional<User> updatedUser = userRepository.findById(2L);
+        Assertions.assertThat(updatedUser.get().getId()).isEqualTo(2L);
+        Assertions.assertThat(updatedUser.get().getFirstName())
+                .isEqualTo(userReplacement.getFirstName());
+        Assertions.assertThat(updatedUser.get().getLastName())
+                .isEqualTo(userReplacement.getLastName());
+        Assertions.assertThat(updatedUser.get().getEmail()).isEqualTo(userReplacement.getEmail());
+    }
 }
