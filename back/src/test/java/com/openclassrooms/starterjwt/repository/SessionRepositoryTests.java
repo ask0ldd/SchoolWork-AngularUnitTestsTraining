@@ -105,4 +105,24 @@ public class SessionRepositoryTests {
                 Assertions.assertThat(collectedSession.get().getId()).isEqualTo(session.getId());
         }
 
+        @DisplayName("Delete() returns an empty Optional")
+        @Test
+        public void delete_ReturnAnEmptyOptional() {
+                teacherRepository.save(teacher1);
+                userRepository.save(user1);
+                userRepository.save(user2);
+                List<User> userList = new ArrayList<>();
+                userList.add(user1);
+                userList.add(user2);
+                Session session = Session.builder().name("name").teacher(teacher1).description("description")
+                                .date(new Date())
+                                .id(1L).users(userList).build();
+                sessionRepository.save(session);
+                Optional<Session> collectedSession = sessionRepository.findById(1L);
+                Assertions.assertThat(collectedSession.isPresent()).isTrue();
+                teacherRepository.deleteById(collectedSession.get().getId());
+                Optional<Session> postDeletionCollectedSession = sessionRepository.findById(1L);
+                Assertions.assertThat(postDeletionCollectedSession.isEmpty()).isTrue();
+        }
+
 }
