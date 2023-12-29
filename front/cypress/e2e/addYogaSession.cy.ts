@@ -33,7 +33,24 @@ describe('Login spec', () => {
       cy.get('mat-select[formControlName=teacher_id]').should('exist').click()
       cy.get('#mat-option-1').should('exist').click()
       cy.get('textarea[formControlName=description]').should('exist').type("description")
-    })
+
+      cy.intercept('POST', '/api/session', {
+        body: {
+          id: 2,
+          date : "2024-12-29 01:07:22",
+          teacher_id : 1,
+          description : "yoga fire description",
+          users : [1],
+          createdAt : "2023-12-29 01:07:22",
+          updatedAt : "2023-12-29 01:07:22"
+        }
+      })
+
+      cy.intercept('GET', '/api/session', { fixture: 'session.json' }).as('sessions')
+
+      cy.get('button[type=submit]').should('exist').click()
 
 
+
+      })
   });
