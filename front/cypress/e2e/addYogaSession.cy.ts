@@ -31,7 +31,8 @@ describe('Login spec', () => {
       cy.get('input[formControlName=name]').should('exist').type("yoga fire")
       cy.get('input[formControlName=date]').should('exist').type("2026-06-10")
       cy.get('mat-select[formControlName=teacher_id]').should('exist').click()
-      cy.get('mat-option').should('exist').click();
+      cy.get('#mat-option-1').should('exist').click()
+      cy.get('textarea[formControlName=description]').should('exist').type("description")
     })
 
 
