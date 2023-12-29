@@ -24,12 +24,14 @@ describe('Login spec', () => {
   
       cy.url().should('include', '/sessions')
 
+      cy.intercept('GET', '/api/teacher', { fixture: 'teachers.json' }).as('teachers')
+
       cy.get('button[routerlink=create]').click()
 
       cy.get('input[formControlName=name]').should('exist').type("yoga fire")
       cy.get('input[formControlName=date]').should('exist').type("2026-06-10")
       cy.get('mat-select[formControlName=teacher_id]').should('exist').click()
-      cy.contains('span.mat-option-text', ' Hélène THIERCELIN ').click()
+      cy.get('mat-option').should('exist').click();
     })
 
 
