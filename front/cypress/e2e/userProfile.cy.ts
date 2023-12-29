@@ -30,17 +30,15 @@ describe('User Profile spec', () => {
             url: '/api/user/1',
         },
         []).as('user')*/
-        cy.intercept('GET', '/api/user/*', { fixture: 'user.json' })
+        cy.intercept('GET', '/api/user/*', { fixture: 'user.json' }).as('user')
 
         cy.contains('span', 'Account').click()
 
-        // cy.wait('@user').then((interception) => {
-        
-
-        cy.contains('p', 'Name: Admin ADMIN').should('exist')
-        cy.contains('p', 'Email: yoga@studio.com').should('exist')
-        cy.contains('p', 'You are admin').should('exist')
-        cy.contains('p', 'December 29, 2023').should('exist')
-        // })
+        cy.wait('@user').then((interception) => {
+            cy.contains('p', 'Name: admin ADMIN').should('exist')
+            cy.contains('p', 'Email: john.doe@email.com').should('exist')
+            cy.contains('p', 'You are admin').should('exist')
+            cy.contains('p', 'December 29, 2023').should('exist')
+        })
     })
   });
