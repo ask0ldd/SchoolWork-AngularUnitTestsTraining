@@ -24,12 +24,6 @@ describe('User Profile spec', () => {
 
         cy.url().should('include', '/sessions')
 
-        /*cy.intercept(
-        {
-            method: 'GET',
-            url: '/api/user/1',
-        },
-        []).as('user')*/
         cy.intercept('GET', '/api/user/*', { fixture: 'user.json' }).as('user')
 
         cy.contains('span', 'Account').click()
