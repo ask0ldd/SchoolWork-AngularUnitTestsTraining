@@ -12,7 +12,7 @@ describe('Yoga Session Details spec', () => {
         },
       })
   
-      cy.intercept('GET', '/api/session', { fixture: 'session.json' }).as('sessions')
+      cy.intercept('GET', '/api/session', { fixture: 'sessions.json' }).as('sessions')
   
       cy.get('input[formControlName=email]').type("yoga@studio.com")
       cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
@@ -25,6 +25,10 @@ describe('Yoga Session Details spec', () => {
       cy.contains('mat-card-subtitle', 'December 29, 2024').should('exist')
 
       cy.get('img[src="assets/sessions.png"]').should('exist')
+
+      cy.intercept('GET', '/api/session/*', { fixture: 'session.json' }).as('session')
+
+      cy.get('button[ng-reflect-router-link="detail,1"]').should('exist').click()
 
       })
   });

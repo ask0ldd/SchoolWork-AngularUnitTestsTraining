@@ -46,7 +46,7 @@ describe('Yoga Session Add spec', () => {
         }
       })
 
-      cy.intercept('GET', '/api/session', { fixture: 'session.json' }).as('sessions')
+      cy.intercept('GET', '/api/session', { fixture: 'sessions.json' }).as('sessions')
 
       cy.get('button[type=submit]').should('exist').click()
 
