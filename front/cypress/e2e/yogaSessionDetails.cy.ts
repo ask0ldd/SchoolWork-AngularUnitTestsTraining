@@ -27,6 +27,7 @@ describe('Yoga Session Details spec', () => {
       cy.get('img[src="assets/sessions.png"]').should('exist')
 
       cy.intercept('GET', '/api/session/*', { fixture: 'session.json' }).as('session')
+      cy.intercept('GET', '/api/teacher/*', { fixture: 'teacher.json' }).as('teacher')
 
       cy.get('button[ng-reflect-router-link="detail,1"]').should('exist').click()
 
