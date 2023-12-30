@@ -1,5 +1,5 @@
-describe('Login spec', () => {
-    it('Login successfull', () => {
+describe('Yoga Session Add spec', () => {
+    it('Can Add then Display a Yoga Session', () => {
       cy.visit('/login')
   
       cy.intercept('POST', '/api/auth/login', {
