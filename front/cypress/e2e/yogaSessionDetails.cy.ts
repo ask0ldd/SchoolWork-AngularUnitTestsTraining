@@ -1,3 +1,4 @@
+// @ts-nocheck
 describe('Yoga Session Details spec', () => {
     it('Should display target yoga session details', () => {
       cy.visit('/login')

@@ -1,3 +1,4 @@
+// @ts-nocheck
 describe('Yoga Session Add spec', () => {
     it('Can Add then Display a Yoga Session', () => {
       cy.visit('/login')

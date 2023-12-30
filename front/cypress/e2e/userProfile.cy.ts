@@ -1,3 +1,4 @@
+// @ts-nocheck
 describe('User Profile spec', () => {
     it('Access User Profile', () => {
         cy.visit('/login')

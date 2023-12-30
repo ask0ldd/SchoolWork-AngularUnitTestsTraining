@@ -1,3 +1,4 @@
+// @ts-nocheck
 describe('Register spec', () => {
     it('Register successfull', () => {
       cy.visit('/register')
