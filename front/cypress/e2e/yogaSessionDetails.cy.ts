@@ -43,12 +43,25 @@ describe('Yoga Session Details spec', () => {
       it('Back button', () => {
         cy.intercept('GET', '/api/session', { fixture: 'sessions.json' }).as('sessions')
         cy.contains('button', 'arrow_back').should('exist').click()
-        
+
         cy.url().should('include', '/sessions')
 
         cy.contains('mat-card-title', 'Rentals available').should('exist')
         cy.contains('mat-card-title', 'yoga fire').should('exist')
         cy.contains('p', 'yoga fire description').should('exist')
         cy.contains('mat-card-subtitle', 'December 29, 2024').should('exist')
+      })
+
+      it('Should be editable & display the expected datas', () => {
+        cy.intercept('GET', '/api/session/*', { fixture: 'session.json' }).as('session')
+        cy.intercept('GET', '/api/teacher/*', { fixture: 'teacher.json' }).as('teacher')
+
+        cy.get('button[ng-reflect-router-link="update,1"]').should('exist').click()
+
+        cy.get('input[formControlName=name]').should('exist')
+        cy.get('input[formControlName=date]').should('exist')
+        cy.get('mat-select[formControlName=teacher_id]').should('exist')
+        // cy.get('#mat-option-1').should('exist')
+        cy.get('textarea[formControlName=description]').should('exist')
       })
   });
