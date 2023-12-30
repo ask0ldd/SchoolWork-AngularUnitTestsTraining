@@ -1,5 +1,5 @@
 describe('Yoga Session Details spec', () => {
-    it('Display Yoga Session Details', () => {
+    it('Should display target yoga session details', () => {
       cy.visit('/login')
   
       cy.intercept('POST', '/api/auth/login', {
@@ -43,6 +43,7 @@ describe('Yoga Session Details spec', () => {
       it('Back button', () => {
         cy.intercept('GET', '/api/session', { fixture: 'sessions.json' }).as('sessions')
         cy.contains('button', 'arrow_back').should('exist').click()
+        
         cy.url().should('include', '/sessions')
 
         cy.contains('mat-card-title', 'Rentals available').should('exist')

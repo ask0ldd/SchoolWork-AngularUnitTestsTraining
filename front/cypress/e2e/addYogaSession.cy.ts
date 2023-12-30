@@ -28,6 +28,8 @@ describe('Yoga Session Add spec', () => {
 
       cy.get('button[routerlink=create]').click()
 
+      cy.url().should('include', '/sessions/create')
+
       cy.get('input[formControlName=name]').should('exist').type("yoga fire")
       cy.get('input[formControlName=date]').should('exist').type("2026-06-10")
       cy.get('mat-select[formControlName=teacher_id]').should('exist').click()
