@@ -120,9 +120,44 @@ public class SessionRepositoryTests {
                 sessionRepository.save(session);
                 Optional<Session> collectedSession = sessionRepository.findById(1L);
                 Assertions.assertThat(collectedSession.isPresent()).isTrue();
-                teacherRepository.deleteById(collectedSession.get().getId());
+                sessionRepository.deleteById(collectedSession.get().getId());
                 Optional<Session> postDeletionCollectedSession = sessionRepository.findById(1L);
                 Assertions.assertThat(postDeletionCollectedSession.isEmpty()).isTrue();
+        }
+
+        @DisplayName("Update() replaces the expected Teacher")
+        @Test
+        public void update_ReplaceTheExpectedSession() {
+                teacherRepository.save(teacher1);
+                userRepository.save(user1);
+                userRepository.save(user2);
+                List<User> userList = new ArrayList<>();
+                userList.add(user1);
+                userList.add(user2);
+                Session session = Session.builder().name("name").teacher(teacher1).description("description")
+                                .date(new Date())
+                                .id(1L).users(userList).build();
+                sessionRepository.save(session);
+                Optional<Session> collectedSession = sessionRepository.findById(1L);
+                Assertions.assertThat(collectedSession.get()).isNotNull();
+                Assertions.assertThat(collectedSession.get().getId()).isGreaterThan(0);
+                Assertions.assertThat(collectedSession.get().getId()).isEqualTo(session.getId());
+                Assertions.assertThat(collectedSession.get().getDescription())
+                                .isEqualTo(session.getDescription());
+                Assertions.assertThat(collectedSession.get().getName()).isEqualTo(session.getName());
+
+                Session sessionReplacement = Session.builder().name("nameRep").teacher(teacher1)
+                                .description("descriptionRep")
+                                .date(new Date())
+                                .id(1L).users(userList).build();
+                sessionRepository.save(sessionReplacement);
+                Optional<Session> updatedSession = sessionRepository.findById(1L);
+                Assertions.assertThat(updatedSession.get()).isNotNull();
+                Assertions.assertThat(updatedSession.get().getId()).isGreaterThan(0);
+                Assertions.assertThat(updatedSession.get().getId()).isEqualTo(sessionReplacement.getId());
+                Assertions.assertThat(updatedSession.get().getDescription())
+                                .isEqualTo(sessionReplacement.getDescription());
+                Assertions.assertThat(updatedSession.get().getName()).isEqualTo(sessionReplacement.getName());
         }
 
 }
