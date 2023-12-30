@@ -28,6 +28,14 @@ describe('Login spec', () => {
     cy.url().should('include', '/sessions')
   })
 
+  it('Logout', () => {
+    cy.contains('span', 'Logout').click()
+
+    cy.contains('span', 'Login').should('exist')
+
+    cy.url().should('equal', 'http://localhost:4200/')
+  })
+
   it('Login failing', () => {
 
   })
